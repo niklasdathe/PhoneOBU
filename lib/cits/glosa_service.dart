@@ -109,7 +109,7 @@ class GlosaService {
         availability: GlosaAvailability.available,
         recommendedSpeedKmh: recommendation,
         signalState: input.signalState,
-        secondsToChange: secondsToChange,
+        secondsToChange: secondsToChange.toDouble(),
         intersectionId: input.intersectionId,
         intersectionName: input.intersectionName,
         signalGroup: input.signalGroup,

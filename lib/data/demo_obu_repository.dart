@@ -78,7 +78,7 @@ class DemoObuRepository implements ObuRepository {
               associationUnambiguous: true,
               greenIntervals: <GreenInterval>[
                 GreenInterval(
-                  startsInSeconds: secondsToGreen,
+                  startsInSeconds: secondsToGreen.toDouble(),
                   endsInSeconds: secondsToGreen + 17,
                 ),
                 GreenInterval(

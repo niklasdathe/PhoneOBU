@@ -163,16 +163,16 @@ class UniversalBleObuRepository implements ObuRepository {
 
       await device.discoverServices();
       final telemetry = await device.getCharacteristic(
-        ObuGattProfile.service,
         ObuGattProfile.telemetry,
+        service: ObuGattProfile.service,
       );
       final response = await device.getCharacteristic(
-        ObuGattProfile.service,
         ObuGattProfile.response,
+        service: ObuGattProfile.service,
       );
       _commandCharacteristic = await device.getCharacteristic(
-        ObuGattProfile.service,
         ObuGattProfile.command,
+        service: ObuGattProfile.service,
       );
 
       _telemetrySubscription = telemetry.onValueReceived.listen(_handleFrame);

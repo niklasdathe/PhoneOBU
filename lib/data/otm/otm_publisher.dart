@@ -167,7 +167,8 @@ class MqttOtmPublisher implements OtmPublisher {
       return;
     }
     try {
-      final payload = MqttClientPayloadBuilder()..addBuffer(record.rawBytes!);
+      final payload = MqttClientPayloadBuilder();
+      payload.payload!.addAll(record.rawBytes!);
       client!.publishMessage(
         'its/' + _configuration.nodeId + '/packet',
         MqttQos.atMostOnce,
