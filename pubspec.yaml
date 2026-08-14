@@ -14,11 +14,11 @@ dependencies:
   cross_file: ^0.3.4+2
   file_picker: ^10.3.3
   flutter_secure_storage: ^9.2.4
-  geolocator: 14.0.3
+  geolocator: 14.0.2
   http: 1.6.0
   latlong2: 0.10.1
   mqtt_client: ^10.11.11
-  package_info_plus: ^10.0.0
+  package_info_plus: ^8.3.1
   path_provider: ^2.1.5
   sensors_plus: 7.1.0
   share_plus: ^11.1.0
