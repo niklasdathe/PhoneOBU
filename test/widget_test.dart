@@ -25,7 +25,14 @@ void main() {
         settingsRepository: _MemorySettingsRepository(),
       ),
     );
-    await repository.started.future;
+    for (
+      var frame = 0;
+      frame < 100 && !repository.started.isCompleted;
+      frame++
+    ) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(repository.started.isCompleted, isTrue);
     await tester.pump();
 
     expect(find.text('Jungfernstieg'), findsOneWidget);
