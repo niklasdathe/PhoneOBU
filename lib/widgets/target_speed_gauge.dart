@@ -51,8 +51,9 @@ class TargetSpeedGauge extends StatelessWidget {
                 ),
                 Text(
                   'km/h',
-                  style: Theme.of(context).textTheme.labelMedium
-                      ?.copyWith(color: ObuColors.muted),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelMedium?.copyWith(color: ObuColors.muted),
                 ),
                 const SizedBox(height: 11),
                 Container(
@@ -99,8 +100,9 @@ class TargetSpeedGauge extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(
                     _countdownLabel(),
-                    style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(color: ObuColors.muted),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: ObuColors.muted),
                   ),
                 ],
               ],

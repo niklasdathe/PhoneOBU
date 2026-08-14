@@ -511,8 +511,9 @@ class SettingsScreen extends StatelessWidget {
                   parsedPort == null ||
                   parsedPort < 1 ||
                   parsedPort > 65535 ||
-                  !RegExp(r'^[a-zA-Z0-9_-]{3,64}$')
-                      .hasMatch(node.text.trim())) {
+                  !RegExp(
+                    r'^[a-zA-Z0-9_-]{3,64}$',
+                  ).hasMatch(node.text.trim())) {
                 return;
               }
               Navigator.of(context).pop(

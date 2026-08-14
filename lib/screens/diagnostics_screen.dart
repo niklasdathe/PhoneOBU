@@ -401,8 +401,9 @@ class DiagnosticsScreen extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             'These commands exercise explicit success/failure responses. In demo mode they control the built-in scenarios.',
-            style: Theme.of(context).textTheme.bodyMedium
-                ?.copyWith(color: ObuColors.muted),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: ObuColors.muted),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -545,8 +546,9 @@ class _ConnectionHeader extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     connected ? 'OBU link active' : _phaseLabel(phase),
-                    style: Theme.of(context).textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w700),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 3),
                   Text(
@@ -605,8 +607,9 @@ class _SubsystemCard extends StatelessWidget {
                 const Spacer(),
                 Text(
                   _healthLabel(status.health),
-                  style: Theme.of(context).textTheme.labelSmall
-                      ?.copyWith(color: color),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(color: color),
                 ),
               ],
             ),
@@ -622,8 +625,9 @@ class _SubsystemCard extends StatelessWidget {
               status.detail,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: ObuColors.muted),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: ObuColors.muted),
             ),
           ],
         ),
@@ -655,8 +659,9 @@ class _DiagnosticRow extends StatelessWidget {
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: Theme.of(context).textTheme.labelLarge
-                  ?.copyWith(color: valueColor),
+              style: Theme.of(
+                context,
+              ).textTheme.labelLarge?.copyWith(color: valueColor),
             ),
           ),
         ],

@@ -131,21 +131,19 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
     });
     _diagnosticSubscription = _repository.diagnostics.listen((value) {
       diagnostics = value;
-      _sessionManager.recordSystemEvent(
-        'transport_diagnostics',
-        <String, Object?>{
-          'phase': value.phase.name,
-          'receivedFrames': value.receivedFrames,
-          'lostSequences': value.lostSequences,
-          'outOfOrderSequences': value.outOfOrderSequences,
-          'overflowDrops': value.overflowDrops,
-          'sessionContinuity': value.sessionContinuity,
-          's3FirmwareVersion': value.s3FirmwareVersion,
-          'c5FirmwareVersion': value.c5FirmwareVersion,
-          'clockSyncState': value.clockSyncState,
-          'clockSyncQuality': value.clockSyncQuality,
-        },
-      );
+      _sessionManager
+          .recordSystemEvent('transport_diagnostics', <String, Object?>{
+            'phase': value.phase.name,
+            'receivedFrames': value.receivedFrames,
+            'lostSequences': value.lostSequences,
+            'outOfOrderSequences': value.outOfOrderSequences,
+            'overflowDrops': value.overflowDrops,
+            'sessionContinuity': value.sessionContinuity,
+            's3FirmwareVersion': value.s3FirmwareVersion,
+            'c5FirmwareVersion': value.c5FirmwareVersion,
+            'clockSyncState': value.clockSyncState,
+            'clockSyncQuality': value.clockSyncQuality,
+          });
       notifyListeners();
     });
     _recordSubscription = _repository.records.listen((value) {

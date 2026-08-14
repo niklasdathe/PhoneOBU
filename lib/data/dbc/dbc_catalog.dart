@@ -164,8 +164,9 @@ class DbcCatalog {
       final previousFile = File(_directory!.path + '/' + item.fileName);
       if (await previousFile.exists()) await previousFile.delete();
     }
-    await File(_directory!.path + '/' + safeName)
-        .writeAsBytes(bytes, flush: true);
+    await File(
+      _directory!.path + '/' + safeName,
+    ).writeAsBytes(bytes, flush: true);
     _definitions = <DbcDefinition>[
       ..._definitions.where(
         (item) => item.hash != definition.hash && item.fileName != safeName,

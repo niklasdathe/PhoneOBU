@@ -90,8 +90,9 @@ class _RecordingCard extends StatelessWidget {
             Text(
               'The canonical session contains OBU data, raw V2X, phone sensors, '
               'warnings, GLOSA, configuration and provenance in one JSONL file.',
-              style: Theme.of(context).textTheme.bodyMedium
-                  ?.copyWith(color: ObuColors.muted),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: ObuColors.muted),
             ),
             const SizedBox(height: 14),
             FilledButton.icon(

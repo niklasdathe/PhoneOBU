@@ -50,8 +50,9 @@ class AppDrawer extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Ride interface',
-                    style: Theme.of(context).textTheme.bodyMedium
-                        ?.copyWith(color: ObuColors.muted),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: ObuColors.muted),
                   ),
                 ],
               ),

@@ -270,8 +270,9 @@ class RideSessionManager {
       final data = _objectMap(row!['data']);
       if (data['isRawV2x'] != true || data['rawBase64'] == null) continue;
       final bytes = base64Decode(data['rawBase64'].toString());
-      final timestamp = DateTime.parse(data['acquisitionTime'].toString())
-          .toUtc();
+      final timestamp = DateTime.parse(
+        data['acquisitionTime'].toString(),
+      ).toUtc();
       builder.add(_enhancedPacketBlock(timestamp, bytes));
     }
     final output = File(session.path.replaceFirst('.jsonl', '.pcapng'));
@@ -387,8 +388,9 @@ class RideSessionManager {
       if (kind == 'obu_snapshot') {
         _replayFrameController.add(
           ReplayFrame(
-            obuSnapshot: ObuSnapshot.fromJson(data)
-                .copyWith(freshness: DataFreshness.replay),
+            obuSnapshot: ObuSnapshot.fromJson(
+              data,
+            ).copyWith(freshness: DataFreshness.replay),
           ),
         );
       } else if (kind == 'phone_sensors') {

@@ -431,8 +431,9 @@ class _MetricCard extends StatelessWidget {
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall
-                      ?.copyWith(color: ObuColors.muted),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(color: ObuColors.muted),
                 ),
                 Text(
                   value,
@@ -574,8 +575,9 @@ class _AttentionChip extends StatelessWidget {
               Text(title, style: Theme.of(context).textTheme.labelLarge),
               Text(
                 detail,
-                style: Theme.of(context).textTheme.bodySmall
-                    ?.copyWith(color: ObuColors.muted),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: ObuColors.muted),
               ),
             ],
           ),
@@ -726,8 +728,9 @@ class _CollisionOverlayState extends State<_CollisionOverlay> {
                         : 'Collision possible in '
                               '${widget.timeToCollision!.toStringAsFixed(1)} s',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge
-                        ?.copyWith(color: Colors.white),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleLarge?.copyWith(color: Colors.white),
                   ),
                   const SizedBox(height: 18),
                   Text(
