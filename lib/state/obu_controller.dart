@@ -96,7 +96,7 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
     } catch (error) {
       appError = 'Settings could not be loaded: ' + error.toString();
     }
-    await _initializeOptionalServices();
+    unawaited(_initializeOptionalServices());
     unawaited(_configureOtmFromSettings());
     try {
       await Future.wait(<Future<void>>[
@@ -269,7 +269,13 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
     } catch (error) {
       appError = 'Session storage unavailable: ' + error.toString();
     }
-    backgroundCapability = await _backgroundService.capability();
+    try {
+      backgroundCapability = await _backgroundService.capability();
+    } catch (error) {
+      backgroundCapability = 'unavailable';
+      appError = 'Background service unavailable: $error';
+    }
+    notifyListeners();
   }
 
   ObuSnapshot _applyComfortableMaximum(ObuSnapshot value) {
