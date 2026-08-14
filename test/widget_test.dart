@@ -25,7 +25,9 @@ void main() {
         settingsRepository: _MemorySettingsRepository(),
       ),
     );
-    await tester.pump();
+    for (var frame = 0; frame < 10; frame++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
     expect(find.text('Jungfernstieg'), findsOneWidget);
     expect(find.text('22'), findsOneWidget);
