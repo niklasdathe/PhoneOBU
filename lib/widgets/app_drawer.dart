@@ -37,16 +37,21 @@ class AppDrawer extends StatelessWidget {
                       color: ObuColors.ink,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.pedal_bike_rounded, color: Colors.white),
+                    child: const Icon(
+                      Icons.pedal_bike_rounded,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  Text('Bicycle OBU', style: Theme.of(context).textTheme.titleLarge),
+                  Text(
+                    'Bicycle OBU',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     'Ride interface',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: ObuColors.muted,
-                        ),
+                    style: Theme.of(context).textTheme.bodyMedium
+                        ?.copyWith(color: ObuColors.muted),
                   ),
                 ],
               ),
@@ -111,9 +116,8 @@ class AppDrawer extends StatelessWidget {
                           ),
                           Text(
                             controller.diagnostics.transportName,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: ObuColors.muted,
-                                ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: ObuColors.muted),
                           ),
                         ],
                       ),

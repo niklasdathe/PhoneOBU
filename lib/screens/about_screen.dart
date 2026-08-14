@@ -28,16 +28,23 @@ class AboutScreen extends StatelessWidget {
                       color: ObuColors.ink,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.pedal_bike_rounded, color: Colors.white),
+                    child: const Icon(
+                      Icons.pedal_bike_rounded,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(height: 18),
-                  Text('Bicycle OBU', style: Theme.of(context).textTheme.headlineMedium),
+                  Text(
+                    'Bicycle OBU',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     'Version 1.0.0 · Flutter Material 3 research prototype for '
                     'Android and iOS. Local C-ITS, bicycle telemetry, warnings '
                     'and recording do not require a server round trip.',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.45),
+                    style: Theme.of(context).textTheme.bodyLarge
+                        ?.copyWith(height: 1.45),
                   ),
                   const SizedBox(height: 14),
                   const Text(
@@ -53,45 +60,66 @@ class AboutScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 22),
-          Text('Transport contract', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            'Transport contract',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 10),
           const _InfoCard(
             icon: Icons.layers_outlined,
             title: 'Versioned envelope',
-            body:
-                'Every frame carries protocol version, source, message type, sequence, message ID and fragmentation fields.',
+            body: 'Every frame carries protocol version, source, message type, sequence, message ID and fragmentation fields.',
           ),
           const SizedBox(height: 10),
           const _InfoCard(
             icon: Icons.notifications_active_outlined,
             title: 'Streaming first',
-            body:
-                'Telemetry uses BLE notifications. Command acknowledgements use indications and explicit success/failure payloads.',
+            body: 'Telemetry uses BLE notifications. Command acknowledgements use indications and explicit success/failure payloads.',
           ),
           const SizedBox(height: 10),
           const _InfoCard(
             icon: Icons.call_split_rounded,
             title: 'MTU independent',
-            body:
-                'Records are fragmented at the application layer and reassembled by message ID. Sequence gaps remain observable.',
+            body: 'Records are fragmented at the application layer and reassembled by message ID. Sequence gaps remain observable.',
           ),
           const SizedBox(height: 22),
-          Text('C-ITS application set', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            'C-ITS application set',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 10),
           Card(
             child: Column(
               children: const <Widget>[
-                _CapabilityRow(code: 'CAM', purpose: 'Nearby road users and motion'),
+                _CapabilityRow(
+                  code: 'CAM',
+                  purpose: 'Nearby road users and motion',
+                ),
                 Divider(),
-                _CapabilityRow(code: 'VAM', purpose: 'Vulnerable road-user awareness'),
+                _CapabilityRow(
+                  code: 'VAM',
+                  purpose: 'Vulnerable road-user awareness',
+                ),
                 Divider(),
-                _CapabilityRow(code: 'DENM', purpose: 'Location-relevant hazards'),
+                _CapabilityRow(
+                  code: 'DENM',
+                  purpose: 'Location-relevant hazards',
+                ),
                 Divider(),
-                _CapabilityRow(code: 'MAPEM', purpose: 'Intersection and lane geometry'),
+                _CapabilityRow(
+                  code: 'MAPEM',
+                  purpose: 'Intersection and lane geometry',
+                ),
                 Divider(),
-                _CapabilityRow(code: 'SPATEM', purpose: 'Signal state and timing'),
+                _CapabilityRow(
+                  code: 'SPATEM',
+                  purpose: 'Signal state and timing',
+                ),
                 Divider(),
-                _CapabilityRow(code: 'IVIM', purpose: 'Infrastructure and sign information'),
+                _CapabilityRow(
+                  code: 'IVIM',
+                  purpose: 'Infrastructure and sign information',
+                ),
               ],
             ),
           ),
@@ -119,10 +147,8 @@ class AboutScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'The default demo mode is deterministic and needs no hardware. Start with --dart-define=OBU_TRANSPORT=ble to scan for the ESP32-S3 GATT service.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: ObuColors.muted,
-                  height: 1.45,
-                ),
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(color: ObuColors.muted, height: 1.45),
           ),
         ],
       ),
@@ -159,10 +185,8 @@ class _InfoCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     body,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: ObuColors.muted,
-                          height: 1.4,
-                        ),
+                    style: Theme.of(context).textTheme.bodyMedium
+                        ?.copyWith(color: ObuColors.muted, height: 1.4),
                   ),
                 ],
               ),
@@ -193,9 +217,8 @@ class _CapabilityRow extends StatelessWidget {
           Expanded(
             child: Text(
               purpose,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: ObuColors.muted,
-                  ),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: ObuColors.muted),
             ),
           ),
         ],

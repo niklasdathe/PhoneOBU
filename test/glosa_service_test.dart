@@ -7,18 +7,18 @@ void main() {
   final now = DateTime.utc(2026, 8, 13, 12);
 
   GlosaInput input(List<GreenInterval> intervals) => GlosaInput(
-        distanceMeters: 120,
-        intersectionId: 42,
-        intersectionName: 'Test intersection',
-        signalGroup: 3,
-        signalState: 'red',
-        mapemTimestamp: now.subtract(const Duration(seconds: 1)),
-        spatemTimestamp: now,
-        validUntil: now.add(const Duration(seconds: 60)),
-        routeMatched: true,
-        associationUnambiguous: true,
-        greenIntervals: intervals,
-      );
+    distanceMeters: 120,
+    intersectionId: 42,
+    intersectionName: 'Test intersection',
+    signalGroup: 3,
+    signalState: 'red',
+    mapemTimestamp: now.subtract(const Duration(seconds: 1)),
+    spatemTimestamp: now,
+    validUntil: now.add(const Duration(seconds: 60)),
+    routeMatched: true,
+    associationUnambiguous: true,
+    greenIntervals: intervals,
+  );
 
   test('selects a later reachable green without exceeding maximum speed', () {
     final result = service.evaluate(

@@ -26,20 +26,20 @@ class SensorConfiguration {
   }
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'id': id,
-        'displayName': displayName,
-        'enabled': enabled,
-        'rateHz': rateHz,
-        'supportedRatesHz': supportedRatesHz,
-      };
+    'id': id,
+    'displayName': displayName,
+    'enabled': enabled,
+    'rateHz': rateHz,
+    'supportedRatesHz': supportedRatesHz,
+  };
 
   factory SensorConfiguration.fromJson(Map<String, Object?> json) {
     final parsedRates =
         (json['supportedRatesHz'] as List<Object?>? ?? <Object?>[1])
-        .whereType<num>()
-        .map((value) => value.round())
-        .where((value) => value > 0)
-        .toList(growable: false);
+            .whereType<num>()
+            .map((value) => value.round())
+            .where((value) => value > 0)
+            .toList(growable: false);
     final rates = parsedRates.isEmpty ? const <int>[1] : parsedRates;
     final requestedRate = (json['rateHz'] as num?)?.round();
     return SensorConfiguration(
@@ -78,29 +78,31 @@ class SensorPose {
   final DateTime updatedAt;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'sensorId': sensorId,
-        'displayName': displayName,
-        'positionMeters': <String, double>{
-          'xForward': xMeters,
-          'yLeft': yMeters,
-          'zUp': zMeters,
-        },
-        'orientationDegrees': <String, double>{
-          'roll': rollDegrees,
-          'pitch': pitchDegrees,
-          'yaw': yawDegrees,
-        },
-        'updatedAt': updatedAt.toUtc().toIso8601String(),
-        'referenceFrame': 'rear_wheel_axle_x_forward_y_left_z_up',
-      };
+    'sensorId': sensorId,
+    'displayName': displayName,
+    'positionMeters': <String, double>{
+      'xForward': xMeters,
+      'yLeft': yMeters,
+      'zUp': zMeters,
+    },
+    'orientationDegrees': <String, double>{
+      'roll': rollDegrees,
+      'pitch': pitchDegrees,
+      'yaw': yawDegrees,
+    },
+    'updatedAt': updatedAt.toUtc().toIso8601String(),
+    'referenceFrame': 'rear_wheel_axle_x_forward_y_left_z_up',
+  };
 
   factory SensorPose.fromJson(Map<String, Object?> json) {
-    final position = (json['positionMeters'] as Map<Object?, Object?>? ??
-            const <Object?, Object?>{})
-        .cast<Object?, Object?>();
-    final orientation = (json['orientationDegrees'] as Map<Object?, Object?>? ??
-            const <Object?, Object?>{})
-        .cast<Object?, Object?>();
+    final position =
+        (json['positionMeters'] as Map<Object?, Object?>? ??
+                const <Object?, Object?>{})
+            .cast<Object?, Object?>();
+    final orientation =
+        (json['orientationDegrees'] as Map<Object?, Object?>? ??
+                const <Object?, Object?>{})
+            .cast<Object?, Object?>();
     return SensorPose(
       sensorId: json['sensorId']?.toString() ?? 'unknown',
       displayName: json['displayName']?.toString() ?? 'Unknown sensor',
@@ -110,7 +112,8 @@ class SensorPose {
       rollDegrees: (orientation['roll'] as num?)?.toDouble() ?? 0,
       pitchDegrees: (orientation['pitch'] as num?)?.toDouble() ?? 0,
       yawDegrees: (orientation['yaw'] as num?)?.toDouble() ?? 0,
-      updatedAt: DateTime.tryParse(json['updatedAt']?.toString() ?? '') ??
+      updatedAt:
+          DateTime.tryParse(json['updatedAt']?.toString() ?? '') ??
           DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
     );
   }
@@ -144,11 +147,11 @@ class OtmConfiguration {
   }
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'enabled': enabled,
-        'host': host,
-        'port': port,
-        'nodeId': nodeId,
-      };
+    'enabled': enabled,
+    'host': host,
+    'port': port,
+    'nodeId': nodeId,
+  };
 
   factory OtmConfiguration.fromJson(Map<String, Object?> json) {
     final host = json['host']?.toString().trim() ?? '';
@@ -157,9 +160,7 @@ class OtmConfiguration {
     return OtmConfiguration(
       enabled: json['enabled'] == true,
       host: host.isEmpty ? 'cits1.opentrafficmap.org' : host,
-      port: ((json['port'] as num?)?.round() ?? 8883)
-          .clamp(1, 65535)
-          .toInt(),
+      port: ((json['port'] as num?)?.round() ?? 8883).clamp(1, 65535).toInt(),
       nodeId: validNodeId ? nodeId : 'bicycleobu01',
     );
   }
@@ -181,45 +182,45 @@ class AppSettings {
   });
 
   factory AppSettings.defaults() => const AppSettings(
-        autoConnect: true,
-        backgroundRideMode: true,
-        v2xProximityWarnings: true,
-        shiftRecommendations: true,
-        hapticWarnings: true,
-        highContrastMap: false,
-        unitSystem: UnitSystem.metric,
-        comfortableMaximumSpeedKmh: 30,
-        sensorConfigurations: <SensorConfiguration>[
-          SensorConfiguration(
-            id: 'phone_motion',
-            displayName: 'Phone motion sensors',
-            enabled: true,
-            rateHz: 50,
-            supportedRatesHz: <int>[10, 25, 50, 100],
-          ),
-          SensorConfiguration(
-            id: 'obu_gnss',
-            displayName: 'OBU GNSS',
-            enabled: true,
-            rateHz: 5,
-            supportedRatesHz: <int>[1, 2, 5],
-          ),
-          SensorConfiguration(
-            id: 'can_stream',
-            displayName: 'Classical CAN forwarding',
-            enabled: true,
-            rateHz: 100,
-            supportedRatesHz: <int>[10, 20, 50, 100],
-          ),
-        ],
-        sensorPoses: <SensorPose>[],
-        otm: OtmConfiguration(
-          enabled: false,
-          host: 'cits1.opentrafficmap.org',
-          port: 8883,
-          nodeId: 'bicycleobu01',
-        ),
-      );
+    autoConnect: true,
+    backgroundRideMode: true,
+    v2xProximityWarnings: true,
+    shiftRecommendations: true,
+    hapticWarnings: true,
+    highContrastMap: false,
+    unitSystem: UnitSystem.metric,
+    comfortableMaximumSpeedKmh: 30,
+    sensorConfigurations: <SensorConfiguration>[
+      SensorConfiguration(
+        id: 'phone_motion',
+        displayName: 'Phone motion sensors',
+        enabled: true,
+        rateHz: 50,
+        supportedRatesHz: <int>[10, 25, 50, 100],
+      ),
+      SensorConfiguration(
+        id: 'obu_gnss',
+        displayName: 'OBU GNSS',
+        enabled: true,
+        rateHz: 5,
+        supportedRatesHz: <int>[1, 2, 5],
+      ),
+      SensorConfiguration(
+        id: 'can_stream',
+        displayName: 'Classical CAN forwarding',
+        enabled: true,
+        rateHz: 100,
+        supportedRatesHz: <int>[10, 20, 50, 100],
+      ),
+    ],
+    sensorPoses: <SensorPose>[],
+    otm: OtmConfiguration(
+      enabled: false,
+      host: 'cits1.opentrafficmap.org',
+      port: 8883,
+      nodeId: 'bicycleobu01',
+    ),
+  );
 
   final bool autoConnect;
   final bool backgroundRideMode;
@@ -249,8 +250,7 @@ class AppSettings {
     return AppSettings(
       autoConnect: autoConnect ?? this.autoConnect,
       backgroundRideMode: backgroundRideMode ?? this.backgroundRideMode,
-      v2xProximityWarnings:
-          v2xProximityWarnings ?? this.v2xProximityWarnings,
+      v2xProximityWarnings: v2xProximityWarnings ?? this.v2xProximityWarnings,
       shiftRecommendations: shiftRecommendations ?? this.shiftRecommendations,
       hapticWarnings: hapticWarnings ?? this.hapticWarnings,
       highContrastMap: highContrastMap ?? this.highContrastMap,
@@ -264,26 +264,27 @@ class AppSettings {
   }
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'schemaVersion': 1,
-        'autoConnect': autoConnect,
-        'backgroundRideMode': backgroundRideMode,
-        'v2xProximityWarnings': v2xProximityWarnings,
-        'shiftRecommendations': shiftRecommendations,
-        'hapticWarnings': hapticWarnings,
-        'highContrastMap': highContrastMap,
-        'unitSystem': unitSystem.name,
-        'comfortableMaximumSpeedKmh': comfortableMaximumSpeedKmh,
-        'sensorConfigurations':
-            sensorConfigurations.map((value) => value.toJson()).toList(),
-        'sensorPoses': sensorPoses.map((value) => value.toJson()).toList(),
-        'otm': otm.toJson(),
-      };
+    'schemaVersion': 1,
+    'autoConnect': autoConnect,
+    'backgroundRideMode': backgroundRideMode,
+    'v2xProximityWarnings': v2xProximityWarnings,
+    'shiftRecommendations': shiftRecommendations,
+    'hapticWarnings': hapticWarnings,
+    'highContrastMap': highContrastMap,
+    'unitSystem': unitSystem.name,
+    'comfortableMaximumSpeedKmh': comfortableMaximumSpeedKmh,
+    'sensorConfigurations': sensorConfigurations
+        .map((value) => value.toJson())
+        .toList(),
+    'sensorPoses': sensorPoses.map((value) => value.toJson()).toList(),
+    'otm': otm.toJson(),
+  };
 
   factory AppSettings.fromJson(Map<String, Object?> json) {
     final defaults = AppSettings.defaults();
     final comfortableMaximum =
         (json['comfortableMaximumSpeedKmh'] as num?)?.toDouble() ??
-            defaults.comfortableMaximumSpeedKmh;
+        defaults.comfortableMaximumSpeedKmh;
     return defaults.copyWith(
       autoConnect: json['autoConnect'] as bool?,
       backgroundRideMode: json['backgroundRideMode'] as bool?,
@@ -295,24 +296,28 @@ class AppSettings {
         (value) => value.name == json['unitSystem'],
         orElse: () => UnitSystem.metric,
       ),
-      comfortableMaximumSpeedKmh:
-          comfortableMaximum.clamp(10, 45).toDouble(),
+      comfortableMaximumSpeedKmh: comfortableMaximum.clamp(10, 45).toDouble(),
       sensorConfigurations: (json['sensorConfigurations'] as List<Object?>?)
           ?.whereType<Map<Object?, Object?>>()
-          .map((value) => SensorConfiguration.fromJson(
-                value.map((key, item) => MapEntry(key.toString(), item)),
-              ))
+          .map(
+            (value) => SensorConfiguration.fromJson(
+              value.map((key, item) => MapEntry(key.toString(), item)),
+            ),
+          )
           .toList(growable: false),
       sensorPoses: (json['sensorPoses'] as List<Object?>?)
           ?.whereType<Map<Object?, Object?>>()
-          .map((value) => SensorPose.fromJson(
-                value.map((key, item) => MapEntry(key.toString(), item)),
-              ))
+          .map(
+            (value) => SensorPose.fromJson(
+              value.map((key, item) => MapEntry(key.toString(), item)),
+            ),
+          )
           .toList(growable: false),
       otm: json['otm'] is Map<Object?, Object?>
           ? OtmConfiguration.fromJson(
-              (json['otm']! as Map<Object?, Object?>)
-                  .map((key, value) => MapEntry(key.toString(), value)),
+              (json['otm']! as Map<Object?, Object?>).map(
+                (key, value) => MapEntry(key.toString(), value),
+              ),
             )
           : null,
     );

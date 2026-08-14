@@ -8,12 +8,14 @@ import '../models/obu_snapshot.dart';
 import 'obu_repository.dart';
 
 class DemoObuRepository implements ObuRepository {
-  final _snapshotController =
-      StreamController<ObuSnapshot>.broadcast(sync: true);
+  final _snapshotController = StreamController<ObuSnapshot>.broadcast(
+    sync: true,
+  );
   final _diagnosticsController =
       StreamController<TransportDiagnostics>.broadcast(sync: true);
-  final _recordController =
-      StreamController<ObuDataRecord>.broadcast(sync: true);
+  final _recordController = StreamController<ObuDataRecord>.broadcast(
+    sync: true,
+  );
   final _glosaService = const GlosaService();
 
   Timer? _timer;
@@ -104,15 +106,18 @@ class DemoObuRepository implements ObuRepository {
           ? ShiftRecommendation.shiftUp
           : ShiftRecommendation.none,
       v2xVehicleNearby: v2xNearby,
-      v2xVehicleDistanceMeters:
-          v2xNearby ? 38 + (math.sin(_time) * 6).round() : null,
+      v2xVehicleDistanceMeters: v2xNearby
+          ? 38 + (math.sin(_time) * 6).round()
+          : null,
       collisionRisk: _collisionRisk,
       collisionTimeSeconds: _collisionRisk ? 1.8 : null,
-      collisionProvenance:
-          _collisionRisk ? WarningProvenance.inferredExperimental : null,
+      collisionProvenance: _collisionRisk
+          ? WarningProvenance.inferredExperimental
+          : null,
       collisionEventId: _collisionRisk ? 'demo-inferred-collision' : null,
-      collisionExpiresAt:
-          _collisionRisk ? now.add(const Duration(minutes: 2)) : null,
+      collisionExpiresAt: _collisionRisk
+          ? now.add(const Duration(minutes: 2))
+          : null,
       roadHazard: RoadHazard(
         eventId: 'demo-denm-roadworks-1',
         title: 'Road work',
@@ -182,8 +187,9 @@ class DemoObuRepository implements ObuRepository {
         c5FirmwareVersion: 'demo-c5-1.0',
         clockSyncState: 'simulated_locked',
         clockSyncQuality: '±1 ms simulated',
-        lastMessageType:
-            _collisionRisk ? 'experimental collision scenario' : 'telemetry',
+        lastMessageType: _collisionRisk
+            ? 'experimental collision scenario'
+            : 'telemetry',
         lastError: null,
       ),
     );
@@ -202,9 +208,14 @@ class DemoObuRepository implements ObuRepository {
             'messageSet': 'DENM',
             'scenario': 'roadWorks',
           },
-          rawBytes: Uint8List.fromList(
-            <int>[0xD3, 0x91, 0x01, _sequence & 0xff, 0x00, 0x7F],
-          ),
+          rawBytes: Uint8List.fromList(<int>[
+            0xD3,
+            0x91,
+            0x01,
+            _sequence & 0xff,
+            0x00,
+            0x7F,
+          ]),
           isRawV2x: true,
         ),
       );

@@ -5,7 +5,7 @@ import 'warning_coordinator.dart';
 
 class CitsApplicationProcessor {
   CitsApplicationProcessor({double comfortableMaximumSpeedKmh = 30})
-      : _comfortableMaximumSpeedKmh = comfortableMaximumSpeedKmh;
+    : _comfortableMaximumSpeedKmh = comfortableMaximumSpeedKmh;
 
   final _warningCoordinator = WarningCoordinator();
   final _glosaService = const GlosaService();
@@ -26,7 +26,11 @@ class CitsApplicationProcessor {
     ObuSnapshot snapshot, {
     DateTime? now,
   }) {
-    return processMessage(CitsInterpreter.interpret(payload), snapshot, now: now);
+    return processMessage(
+      CitsInterpreter.interpret(payload),
+      snapshot,
+      now: now,
+    );
   }
 
   ObuSnapshot processMessage(
@@ -60,10 +64,7 @@ class CitsApplicationProcessor {
       );
     }
     if (message is VamRoadUser) {
-      return snapshot.copyWith(
-        receivedAt: receivedAt,
-        v2xVehicleNearby: true,
-      );
+      return snapshot.copyWith(receivedAt: receivedAt, v2xVehicleNearby: true);
     }
     if (message is DenmEvent) {
       final decision = _warningCoordinator.evaluate(message, now: receivedAt);
@@ -101,8 +102,9 @@ class CitsApplicationProcessor {
         receivedAt: receivedAt,
         collisionRisk: collision && message.critical,
         collisionTimeSeconds: message.timeToCollisionSeconds,
-        collisionProvenance:
-            collision ? WarningProvenance.standardizedDenm : null,
+        collisionProvenance: collision
+            ? WarningProvenance.standardizedDenm
+            : null,
         clearCollisionProvenance: !collision,
         collisionEventId: collision ? message.eventId : null,
         clearCollisionEventId: !collision,
@@ -144,7 +146,8 @@ class CitsApplicationProcessor {
                 spatemTimestamp: message.sourceTimestamp,
                 validUntil: message.validUntil,
                 routeMatched: mapem.routeMatched,
-                associationUnambiguous: mapem.associationUnambiguous &&
+                associationUnambiguous:
+                    mapem.associationUnambiguous &&
                     mapem.signalGroup == message.signalGroup,
                 greenIntervals: message.greenIntervals
                     .map(
@@ -158,10 +161,7 @@ class CitsApplicationProcessor {
               comfortableMaximumSpeedKmh: _comfortableMaximumSpeedKmh,
               now: receivedAt,
             );
-      return snapshot.copyWith(
-        receivedAt: receivedAt,
-        glosa: recommendation,
-      );
+      return snapshot.copyWith(receivedAt: receivedAt, glosa: recommendation);
     }
     if (message is IvimInformation) {
       return snapshot.copyWith(

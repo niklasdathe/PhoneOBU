@@ -68,11 +68,11 @@ class DbcDefinition {
   }
 
   Map<String, Object?> toManifestJson() => <String, Object?>{
-        'fileName': fileName,
-        'hash': hash,
-        'enabled': enabled,
-        'importedAt': importedAt.toUtc().toIso8601String(),
-      };
+    'fileName': fileName,
+    'hash': hash,
+    'enabled': enabled,
+    'importedAt': importedAt.toUtc().toIso8601String(),
+  };
 }
 
 class DecodedCanSignal {
@@ -121,7 +121,7 @@ class DbcCatalog {
             enabled: item['enabled'] != false,
             importedAt:
                 DateTime.tryParse(item['importedAt']?.toString() ?? '') ??
-                    DateTime.now(),
+                DateTime.now(),
           ),
         );
       }
@@ -139,7 +139,8 @@ class DbcCatalog {
     );
     if (result == null || result.files.isEmpty) return null;
     final file = result.files.single;
-    final bytes = file.bytes ??
+    final bytes =
+        file.bytes ??
         (file.path == null ? null : await File(file.path!).readAsBytes());
     if (bytes == null) throw StateError('The selected DBC could not be read.');
     return importBytes(file.name, bytes);
@@ -163,10 +164,8 @@ class DbcCatalog {
       final previousFile = File(_directory!.path + '/' + item.fileName);
       if (await previousFile.exists()) await previousFile.delete();
     }
-    await File(_directory!.path + '/' + safeName).writeAsBytes(
-      bytes,
-      flush: true,
-    );
+    await File(_directory!.path + '/' + safeName)
+        .writeAsBytes(bytes, flush: true);
     _definitions = <DbcDefinition>[
       ..._definitions.where(
         (item) => item.hash != definition.hash && item.fileName != safeName,
@@ -178,17 +177,14 @@ class DbcCatalog {
   }
 
   DbcDefinition parseBytes(String fileName, Uint8List bytes) {
-    return _parse(
-      fileName,
-      bytes,
-      enabled: true,
-      importedAt: DateTime.now(),
-    );
+    return _parse(fileName, bytes, enabled: true, importedAt: DateTime.now());
   }
 
   Future<void> setEnabled(String hash, bool enabled) async {
     _definitions = _definitions
-        .map((item) => item.hash == hash ? item.copyWith(enabled: enabled) : item)
+        .map(
+          (item) => item.hash == hash ? item.copyWith(enabled: enabled) : item,
+        )
         .toList(growable: false);
     await _saveManifest();
   }
@@ -200,8 +196,9 @@ class DbcCatalog {
       final file = File(_directory!.path + '/' + match.fileName);
       if (await file.exists()) await file.delete();
     }
-    _definitions =
-        _definitions.where((item) => item.hash != hash).toList(growable: false);
+    _definitions = _definitions
+        .where((item) => item.hash != hash)
+        .toList(growable: false);
     await _saveManifest();
   }
 
@@ -228,8 +225,9 @@ class DbcCatalog {
   ) {
     final results = <DecodedCanSignal>[];
     for (final definition in definitions) {
-      for (final message
-          in definition.messages.where((item) => item.id == identifier)) {
+      for (final message in definition.messages.where(
+        (item) => item.id == identifier,
+      )) {
         for (final signal in message.signals) {
           final raw = signal.littleEndian
               ? _readLittleEndian(payload, signal.startBit, signal.bitLength)
@@ -263,7 +261,9 @@ class DbcCatalog {
     required DateTime importedAt,
   }) {
     final text = utf8.decode(bytes, allowMalformed: true);
-    final messagePattern = RegExp(r'^BO_\s+(\d+)\s+([A-Za-z0-9_]+):\s+(\d+)\s+.*$');
+    final messagePattern = RegExp(
+      r'^BO_\s+(\d+)\s+([A-Za-z0-9_]+):\s+(\d+)\s+.*$',
+    );
     final signalPattern = RegExp(
       r'^\s*SG_\s+([A-Za-z0-9_]+)(?:\s+[Mm]\d+)?\s*:\s*(\d+)\|(\d+)@([01])([+-])\s+\(([-+0-9.eE]+),([-+0-9.eE]+)\)\s+\[[^\]]*\]\s+"([^"]*)"',
     );
@@ -274,7 +274,8 @@ class DbcCatalog {
     var signals = <DbcSignal>[];
 
     void finishMessage() {
-      if (currentId == null || currentName == null || currentDlc == null) return;
+      if (currentId == null || currentName == null || currentDlc == null)
+        return;
       messages.add(
         DbcMessage(
           id: currentId!,
@@ -312,7 +313,9 @@ class DbcCatalog {
     }
     finishMessage();
     if (messages.isEmpty) {
-      throw const FormatException('The selected file contains no DBC messages.');
+      throw const FormatException(
+        'The selected file contains no DBC messages.',
+      );
     }
     return DbcDefinition(
       fileName: fileName,

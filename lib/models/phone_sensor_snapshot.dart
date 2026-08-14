@@ -38,12 +38,12 @@ class DeviceOrientationReading {
   final DateTime timestamp;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'rollDegrees': rollDegrees,
-        'pitchDegrees': pitchDegrees,
-        'yawDegrees': yawDegrees,
-        'source': source,
-        'timestamp': timestamp.toUtc().toIso8601String(),
-      };
+    'rollDegrees': rollDegrees,
+    'pitchDegrees': pitchDegrees,
+    'yawDegrees': yawDegrees,
+    'source': source,
+    'timestamp': timestamp.toUtc().toIso8601String(),
+  };
 
   factory DeviceOrientationReading.fromJson(Map<String, Object?> json) {
     return DeviceOrientationReading(
@@ -82,18 +82,18 @@ class PhoneLocationReading {
   final DateTime timestamp;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'latitude': latitude,
-        'longitude': longitude,
-        'altitudeMeters': altitudeMeters,
-        'horizontalAccuracyMeters': horizontalAccuracyMeters,
-        'verticalAccuracyMeters': verticalAccuracyMeters,
-        'speedMps': speedMps,
-        'speedAccuracyMps': speedAccuracyMps,
-        'courseDegrees': courseDegrees,
-        'courseAccuracyDegrees': courseAccuracyDegrees,
-        'timestamp': timestamp.toUtc().toIso8601String(),
-        'provenance': 'os_fused_location',
-      };
+    'latitude': latitude,
+    'longitude': longitude,
+    'altitudeMeters': altitudeMeters,
+    'horizontalAccuracyMeters': horizontalAccuracyMeters,
+    'verticalAccuracyMeters': verticalAccuracyMeters,
+    'speedMps': speedMps,
+    'speedAccuracyMps': speedAccuracyMps,
+    'courseDegrees': courseDegrees,
+    'courseAccuracyDegrees': courseAccuracyDegrees,
+    'timestamp': timestamp.toUtc().toIso8601String(),
+    'provenance': 'os_fused_location',
+  };
 
   factory PhoneLocationReading.fromJson(Map<String, Object?> json) {
     return PhoneLocationReading(
@@ -105,8 +105,7 @@ class PhoneLocationReading {
       verticalAccuracyMeters:
           (json['verticalAccuracyMeters'] as num?)?.toDouble() ?? 0,
       speedMps: (json['speedMps'] as num?)?.toDouble() ?? 0,
-      speedAccuracyMps:
-          (json['speedAccuracyMps'] as num?)?.toDouble() ?? 0,
+      speedAccuracyMps: (json['speedAccuracyMps'] as num?)?.toDouble() ?? 0,
       courseDegrees: (json['courseDegrees'] as num?)?.toDouble() ?? 0,
       courseAccuracyDegrees:
           (json['courseAccuracyDegrees'] as num?)?.toDouble() ?? 0,
@@ -237,8 +236,7 @@ class PhoneSensorSnapshot {
           magnetometerAvailability ?? this.magnetometerAvailability,
       barometerAvailability:
           barometerAvailability ?? this.barometerAvailability,
-      locationAvailability:
-          locationAvailability ?? this.locationAvailability,
+      locationAvailability: locationAvailability ?? this.locationAvailability,
       orientationAvailability:
           orientationAvailability ?? this.orientationAvailability,
       lastError: clearError ? null : lastError ?? this.lastError,
@@ -246,33 +244,34 @@ class PhoneSensorSnapshot {
   }
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'mode': mode.name,
-        'updatedAt': updatedAt.toUtc().toIso8601String(),
-        'rawAccelerometer': accelerometer.toJson(),
-        'rawAccelerometerTimestamp':
-            accelerometerTimestamp.toUtc().toIso8601String(),
-        'osFusedLinearAcceleration': userAccelerometer.toJson(),
-        'osFusedLinearAccelerationTimestamp':
-            userAccelerometerTimestamp.toUtc().toIso8601String(),
-        'rawGyroscope': gyroscope.toJson(),
-        'rawGyroscopeTimestamp': gyroscopeTimestamp.toUtc().toIso8601String(),
-        'rawMagnetometer': magnetometer.toJson(),
-        'rawMagnetometerTimestamp':
-            magnetometerTimestamp.toUtc().toIso8601String(),
-        'pressureHpa': pressureHpa,
-        'barometerTimestamp': barometerTimestamp?.toUtc().toIso8601String(),
-        'osFusedLocation': location?.toJson(),
-        'derivedCompassHeadingDegrees': compassHeadingDegrees,
-        'derivedOrientation': orientation?.toJson(),
-        'availability': <String, String>{
-          'motion': motionAvailability.name,
-          'magnetometer': magnetometerAvailability.name,
-          'barometer': barometerAvailability.name,
-          'location': locationAvailability.name,
-          'orientation': orientationAvailability.name,
-        },
-        'lastError': lastError,
-      };
+    'mode': mode.name,
+    'updatedAt': updatedAt.toUtc().toIso8601String(),
+    'rawAccelerometer': accelerometer.toJson(),
+    'rawAccelerometerTimestamp': accelerometerTimestamp
+        .toUtc()
+        .toIso8601String(),
+    'osFusedLinearAcceleration': userAccelerometer.toJson(),
+    'osFusedLinearAccelerationTimestamp': userAccelerometerTimestamp
+        .toUtc()
+        .toIso8601String(),
+    'rawGyroscope': gyroscope.toJson(),
+    'rawGyroscopeTimestamp': gyroscopeTimestamp.toUtc().toIso8601String(),
+    'rawMagnetometer': magnetometer.toJson(),
+    'rawMagnetometerTimestamp': magnetometerTimestamp.toUtc().toIso8601String(),
+    'pressureHpa': pressureHpa,
+    'barometerTimestamp': barometerTimestamp?.toUtc().toIso8601String(),
+    'osFusedLocation': location?.toJson(),
+    'derivedCompassHeadingDegrees': compassHeadingDegrees,
+    'derivedOrientation': orientation?.toJson(),
+    'availability': <String, String>{
+      'motion': motionAvailability.name,
+      'magnetometer': magnetometerAvailability.name,
+      'barometer': barometerAvailability.name,
+      'location': locationAvailability.name,
+      'orientation': orientationAvailability.name,
+    },
+    'lastError': lastError,
+  };
 
   factory PhoneSensorSnapshot.fromJson(Map<String, Object?> json) {
     Map<String, Object?> map(Object? value) {
@@ -288,8 +287,9 @@ class PhoneSensorSnapshot {
       );
     }
 
-    final pressureTimestamp =
-        DateTime.tryParse(json['barometerTimestamp']?.toString() ?? '');
+    final pressureTimestamp = DateTime.tryParse(
+      json['barometerTimestamp']?.toString() ?? '',
+    );
     return PhoneSensorSnapshot(
       mode: PhoneSensorMode.values.firstWhere(
         (value) => value.name == json['mode'],
@@ -297,31 +297,33 @@ class PhoneSensorSnapshot {
       ),
       updatedAt: DateTime.parse(json['updatedAt'].toString()),
       accelerometer: Vector3Reading.fromJson(map(json['rawAccelerometer'])),
-      accelerometerTimestamp:
-          DateTime.parse(json['rawAccelerometerTimestamp'].toString()),
-      userAccelerometer:
-          Vector3Reading.fromJson(map(json['osFusedLinearAcceleration'])),
+      accelerometerTimestamp: DateTime.parse(
+        json['rawAccelerometerTimestamp'].toString(),
+      ),
+      userAccelerometer: Vector3Reading.fromJson(
+        map(json['osFusedLinearAcceleration']),
+      ),
       userAccelerometerTimestamp: DateTime.parse(
         json['osFusedLinearAccelerationTimestamp'].toString(),
       ),
       gyroscope: Vector3Reading.fromJson(map(json['rawGyroscope'])),
-      gyroscopeTimestamp:
-          DateTime.parse(json['rawGyroscopeTimestamp'].toString()),
+      gyroscopeTimestamp: DateTime.parse(
+        json['rawGyroscopeTimestamp'].toString(),
+      ),
       magnetometer: Vector3Reading.fromJson(map(json['rawMagnetometer'])),
-      magnetometerTimestamp:
-          DateTime.parse(json['rawMagnetometerTimestamp'].toString()),
+      magnetometerTimestamp: DateTime.parse(
+        json['rawMagnetometerTimestamp'].toString(),
+      ),
       pressureHpa: (json['pressureHpa'] as num?)?.toDouble(),
       barometerTimestamp: pressureTimestamp,
       location: json['osFusedLocation'] == null
           ? null
           : PhoneLocationReading.fromJson(map(json['osFusedLocation'])),
-      compassHeadingDegrees:
-          (json['derivedCompassHeadingDegrees'] as num?)?.toDouble(),
+      compassHeadingDegrees: (json['derivedCompassHeadingDegrees'] as num?)
+          ?.toDouble(),
       orientation: json['derivedOrientation'] == null
           ? null
-          : DeviceOrientationReading.fromJson(
-              map(json['derivedOrientation']),
-            ),
+          : DeviceOrientationReading.fromJson(map(json['derivedOrientation'])),
       motionAvailability: status('motion'),
       magnetometerAvailability: status('magnetometer'),
       barometerAvailability: status('barometer'),

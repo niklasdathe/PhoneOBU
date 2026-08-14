@@ -55,26 +55,29 @@ void main() {
       expect(reassembler.lostSequences, 1);
     });
 
-    test('detects an out-of-order fragment without corrupting stream state', () {
-      final reassembler = ObuMessageReassembler();
-      Uint8List frame(int sequence, int messageId) {
-        return ObuFrameCodec.encodeMessage(
-          source: MessageSource.s3,
-          type: MessageType.telemetry,
-          messageId: messageId,
-          startSequence: sequence,
-          payload: Uint8List.fromList(<int>[messageId]),
-        ).single;
-      }
+    test(
+      'detects an out-of-order fragment without corrupting stream state',
+      () {
+        final reassembler = ObuMessageReassembler();
+        Uint8List frame(int sequence, int messageId) {
+          return ObuFrameCodec.encodeMessage(
+            source: MessageSource.s3,
+            type: MessageType.telemetry,
+            messageId: messageId,
+            startSequence: sequence,
+            payload: Uint8List.fromList(<int>[messageId]),
+          ).single;
+        }
 
-      reassembler.add(frame(10, 1));
-      reassembler.add(frame(12, 2));
-      reassembler.add(frame(11, 3));
-      reassembler.add(frame(13, 4));
+        reassembler.add(frame(10, 1));
+        reassembler.add(frame(12, 2));
+        reassembler.add(frame(11, 3));
+        reassembler.add(frame(13, 4));
 
-      expect(reassembler.lostSequences, 1);
-      expect(reassembler.outOfOrderSequences, 1);
-    });
+        expect(reassembler.lostSequences, 1);
+        expect(reassembler.outOfOrderSequences, 1);
+      },
+    );
 
     test('rejects a corrupted frame', () {
       final frame = ObuFrameCodec.encodeMessage(
@@ -93,7 +96,9 @@ void main() {
     });
 
     test('fits a complete frame inside the default ATT payload', () {
-      final payload = Uint8List.fromList(List<int>.generate(50, (index) => index));
+      final payload = Uint8List.fromList(
+        List<int>.generate(50, (index) => index),
+      );
       final frames = ObuFrameCodec.encodeMessage(
         source: MessageSource.phone,
         type: MessageType.command,

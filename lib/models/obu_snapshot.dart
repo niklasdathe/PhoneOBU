@@ -8,7 +8,14 @@ enum WarningProvenance { standardizedDenm, inferredExperimental, simulation }
 
 enum SubsystemHealth { online, degraded, offline, unavailable }
 
-enum ConnectionPhase { demo, scanning, connecting, connected, disconnected, error }
+enum ConnectionPhase {
+  demo,
+  scanning,
+  connecting,
+  connected,
+  disconnected,
+  error,
+}
 
 enum GlosaAvailability {
   available,
@@ -75,19 +82,19 @@ class GlosaRecommendation {
       recommendedSpeedKmh != null;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'availability': availability.name,
-        'recommendedSpeedKmh': recommendedSpeedKmh,
-        'signalState': signalState,
-        'secondsToChange': secondsToChange,
-        'intersectionId': intersectionId,
-        'intersectionName': intersectionName,
-        'signalGroup': signalGroup,
-        'mapemTimestamp': mapemTimestamp?.toUtc().toIso8601String(),
-        'spatemTimestamp': spatemTimestamp?.toUtc().toIso8601String(),
-        'targetsLaterGreen': targetsLaterGreen,
-        'statusDetail': statusDetail,
-        'validUntil': validUntil?.toUtc().toIso8601String(),
-      };
+    'availability': availability.name,
+    'recommendedSpeedKmh': recommendedSpeedKmh,
+    'signalState': signalState,
+    'secondsToChange': secondsToChange,
+    'intersectionId': intersectionId,
+    'intersectionName': intersectionName,
+    'signalGroup': signalGroup,
+    'mapemTimestamp': mapemTimestamp?.toUtc().toIso8601String(),
+    'spatemTimestamp': spatemTimestamp?.toUtc().toIso8601String(),
+    'targetsLaterGreen': targetsLaterGreen,
+    'statusDetail': statusDetail,
+    'validUntil': validUntil?.toUtc().toIso8601String(),
+  };
 
   factory GlosaRecommendation.fromJson(Map<String, Object?> json) {
     return GlosaRecommendation(
@@ -95,15 +102,18 @@ class GlosaRecommendation {
         (value) => value.name == json['availability'],
         orElse: () => GlosaAvailability.invalidTiming,
       ),
-      recommendedSpeedKmh:
-          (json['recommendedSpeedKmh'] as num?)?.toDouble(),
+      recommendedSpeedKmh: (json['recommendedSpeedKmh'] as num?)?.toDouble(),
       signalState: json['signalState']?.toString(),
       secondsToChange: (json['secondsToChange'] as num?)?.toDouble(),
       intersectionId: (json['intersectionId'] as num?)?.round(),
       intersectionName: json['intersectionName']?.toString(),
       signalGroup: (json['signalGroup'] as num?)?.round(),
-      mapemTimestamp: DateTime.tryParse(json['mapemTimestamp']?.toString() ?? ''),
-      spatemTimestamp: DateTime.tryParse(json['spatemTimestamp']?.toString() ?? ''),
+      mapemTimestamp: DateTime.tryParse(
+        json['mapemTimestamp']?.toString() ?? '',
+      ),
+      spatemTimestamp: DateTime.tryParse(
+        json['spatemTimestamp']?.toString() ?? '',
+      ),
       targetsLaterGreen: json['targetsLaterGreen'] == true,
       statusDetail: json['statusDetail']?.toString() ?? 'Timing unavailable',
       validUntil: DateTime.tryParse(json['validUntil']?.toString() ?? ''),
@@ -135,15 +145,15 @@ class RoadHazard {
   bool get isExpired => DateTime.now().isAfter(expiresAt);
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'eventId': eventId,
-        'title': title,
-        'detail': detail,
-        'distanceMeters': distanceMeters,
-        'severity': severity.name,
-        'provenance': provenance.name,
-        'sourceTimestamp': sourceTimestamp.toUtc().toIso8601String(),
-        'expiresAt': expiresAt.toUtc().toIso8601String(),
-      };
+    'eventId': eventId,
+    'title': title,
+    'detail': detail,
+    'distanceMeters': distanceMeters,
+    'severity': severity.name,
+    'provenance': provenance.name,
+    'sourceTimestamp': sourceTimestamp.toUtc().toIso8601String(),
+    'expiresAt': expiresAt.toUtc().toIso8601String(),
+  };
 
   factory RoadHazard.fromJson(Map<String, Object?> json) {
     return RoadHazard(
@@ -159,11 +169,11 @@ class RoadHazard {
         (value) => value.name == json['provenance'],
         orElse: () => WarningProvenance.standardizedDenm,
       ),
-      sourceTimestamp: DateTime.tryParse(
-            json['sourceTimestamp']?.toString() ?? '',
-          ) ??
+      sourceTimestamp:
+          DateTime.tryParse(json['sourceTimestamp']?.toString() ?? '') ??
           DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
-      expiresAt: DateTime.tryParse(json['expiresAt']?.toString() ?? '') ??
+      expiresAt:
+          DateTime.tryParse(json['expiresAt']?.toString() ?? '') ??
           DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
     );
   }
@@ -183,11 +193,11 @@ class NavigationInstruction {
   final int etaMinutes;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'action': action,
-        'street': street,
-        'distanceMeters': distanceMeters,
-        'etaMinutes': etaMinutes,
-      };
+    'action': action,
+    'street': street,
+    'distanceMeters': distanceMeters,
+    'etaMinutes': etaMinutes,
+  };
 
   factory NavigationInstruction.fromJson(Map<String, Object?> json) {
     return NavigationInstruction(
@@ -211,10 +221,10 @@ class SubsystemStatus {
   final String detail;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'name': name,
-        'health': health.name,
-        'detail': detail,
-      };
+    'name': name,
+    'health': health.name,
+    'detail': detail,
+  };
 
   factory SubsystemStatus.fromJson(Map<String, Object?> json) {
     return SubsystemStatus(
@@ -361,28 +371,27 @@ class ObuSnapshot {
   }
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'receivedAt': receivedAt.toUtc().toIso8601String(),
-        'freshness': freshness.name,
-        'speedKmh': speedKmh,
-        'glosa': glosa.toJson(),
-        'headingDegrees': headingDegrees,
-        'headingCardinal': headingCardinal,
-        'heartRateBpm': heartRateBpm,
-        'cadenceRpm': cadenceRpm,
-        'shiftRecommendation': shiftRecommendation.name,
-        'v2xVehicleNearby': v2xVehicleNearby,
-        'v2xVehicleDistanceMeters': v2xVehicleDistanceMeters,
-        'collisionRisk': collisionRisk,
-        'collisionTimeSeconds': collisionTimeSeconds,
-        'collisionProvenance': collisionProvenance?.name,
-        'collisionEventId': collisionEventId,
-        'collisionExpiresAt':
-            collisionExpiresAt?.toUtc().toIso8601String(),
-        'roadHazard': roadHazard?.toJson(),
-        'navigation': navigation?.toJson(),
-        'obuConnected': obuConnected,
-        'subsystems': subsystems.map((value) => value.toJson()).toList(),
-      };
+    'receivedAt': receivedAt.toUtc().toIso8601String(),
+    'freshness': freshness.name,
+    'speedKmh': speedKmh,
+    'glosa': glosa.toJson(),
+    'headingDegrees': headingDegrees,
+    'headingCardinal': headingCardinal,
+    'heartRateBpm': heartRateBpm,
+    'cadenceRpm': cadenceRpm,
+    'shiftRecommendation': shiftRecommendation.name,
+    'v2xVehicleNearby': v2xVehicleNearby,
+    'v2xVehicleDistanceMeters': v2xVehicleDistanceMeters,
+    'collisionRisk': collisionRisk,
+    'collisionTimeSeconds': collisionTimeSeconds,
+    'collisionProvenance': collisionProvenance?.name,
+    'collisionEventId': collisionEventId,
+    'collisionExpiresAt': collisionExpiresAt?.toUtc().toIso8601String(),
+    'roadHazard': roadHazard?.toJson(),
+    'navigation': navigation?.toJson(),
+    'obuConnected': obuConnected,
+    'subsystems': subsystems.map((value) => value.toJson()).toList(),
+  };
 
   factory ObuSnapshot.fromJson(Map<String, Object?> json) {
     Map<String, Object?>? objectMap(Object? value) {
@@ -410,11 +419,10 @@ class ObuSnapshot {
         orElse: () => ShiftRecommendation.none,
       ),
       v2xVehicleNearby: json['v2xVehicleNearby'] == true,
-      v2xVehicleDistanceMeters:
-          (json['v2xVehicleDistanceMeters'] as num?)?.round(),
+      v2xVehicleDistanceMeters: (json['v2xVehicleDistanceMeters'] as num?)
+          ?.round(),
       collisionRisk: json['collisionRisk'] == true,
-      collisionTimeSeconds:
-          (json['collisionTimeSeconds'] as num?)?.toDouble(),
+      collisionTimeSeconds: (json['collisionTimeSeconds'] as num?)?.toDouble(),
       collisionProvenance: collisionProvenanceName == null
           ? null
           : WarningProvenance.values.firstWhere(
@@ -531,8 +539,7 @@ class TransportDiagnostics {
       lostSequences: lostSequences ?? this.lostSequences,
       recoveredRecords: recoveredRecords ?? this.recoveredRecords,
       overflowDrops: overflowDrops ?? this.overflowDrops,
-      outOfOrderSequences:
-          outOfOrderSequences ?? this.outOfOrderSequences,
+      outOfOrderSequences: outOfOrderSequences ?? this.outOfOrderSequences,
       authenticated: authenticated ?? this.authenticated,
       sessionContinuity: sessionContinuity ?? this.sessionContinuity,
       s3FirmwareVersion: s3FirmwareVersion ?? this.s3FirmwareVersion,

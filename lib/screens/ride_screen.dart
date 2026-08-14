@@ -57,7 +57,10 @@ class RideScreen extends StatelessWidget {
                       left: 16,
                       right: 16,
                       top: 10,
-                      child: _TopBar(snapshot: snapshot, controller: controller),
+                      child: _TopBar(
+                        snapshot: snapshot,
+                        controller: controller,
+                      ),
                     ),
                     Positioned(
                       left: 0,
@@ -132,10 +135,11 @@ class _TopBar extends StatelessWidget {
             action: routeStep.instruction,
             street: routeStep.street,
             distanceMeters:
-                (routeNavigation.distanceToNextStepMeters ?? routeStep.distanceMeters)
+                (routeNavigation.distanceToNextStepMeters ??
+                        routeStep.distanceMeters)
                     .round(),
-            etaMinutes:
-                ((routeNavigation.route?.durationSeconds ?? 0) / 60).ceil(),
+            etaMinutes: ((routeNavigation.route?.durationSeconds ?? 0) / 60)
+                .ceil(),
           );
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,40 +158,42 @@ class _TopBar extends StatelessWidget {
             child: InkWell(
               onTap: () => _showDestinationSearch(context, controller),
               child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-              child: Row(
-                children: <Widget>[
-                  const Icon(Icons.turn_right_rounded, size: 34),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          navigation == null
-                              ? 'Choose a destination'
-                              : '${navigation.distanceMeters} m · ${navigation.action}',
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          navigation?.street ?? 'Navigation is idle',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: ObuColors.muted,
-                              ),
-                        ),
-                      ],
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 13,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    const Icon(Icons.turn_right_rounded, size: 34),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            navigation == null
+                                ? 'Choose a destination'
+                                : '${navigation.distanceMeters} m · ${navigation.action}',
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            navigation?.street ?? 'Navigation is idle',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: ObuColors.muted),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  if (navigation != null)
-                    Text(
-                      '${navigation.etaMinutes} min',
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                ],
-              ),
+                    if (navigation != null)
+                      Text(
+                        '${navigation.etaMinutes} min',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -230,7 +236,8 @@ class _TopBar extends StatelessWidget {
                   trailing: <Widget>[
                     IconButton(
                       tooltip: 'Search',
-                      onPressed: () => controller.searchPlaces(textController.text),
+                      onPressed: () =>
+                          controller.searchPlaces(textController.text),
                       icon: const Icon(Icons.arrow_forward_rounded),
                     ),
                   ],
@@ -298,7 +305,8 @@ class _LiveBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final live = snapshot.freshness == DataFreshness.live && snapshot.obuConnected;
+    final live =
+        snapshot.freshness == DataFreshness.live && snapshot.obuConnected;
     final recovered = snapshot.freshness == DataFreshness.bufferedRecovered;
     final replay = snapshot.freshness == DataFreshness.replay;
     return Container(
@@ -313,25 +321,25 @@ class _LiveBadge extends StatelessWidget {
         message: live
             ? 'Live OBU data'
             : recovered
-                ? 'Buffered data recovered after interruption'
-                : replay
-                    ? 'Recorded session replay'
-                    : 'Data is stale or unavailable',
+            ? 'Buffered data recovered after interruption'
+            : replay
+            ? 'Recorded session replay'
+            : 'Data is stale or unavailable',
         child: Icon(
           live
               ? Icons.bluetooth_connected_rounded
               : replay
-                  ? Icons.replay_rounded
-                  : recovered
-                      ? Icons.restore_rounded
-                      : Icons.bluetooth_disabled_rounded,
+              ? Icons.replay_rounded
+              : recovered
+              ? Icons.restore_rounded
+              : Icons.bluetooth_disabled_rounded,
           color: live
               ? ObuColors.green
               : recovered
-                  ? ObuColors.amber
-                  : replay
-                      ? ObuColors.blue
-                      : ObuColors.red,
+              ? ObuColors.amber
+              : replay
+              ? ObuColors.blue
+              : ObuColors.red,
         ),
       ),
     );
@@ -346,7 +354,8 @@ class _MetricsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final phoneHeading = phoneSensors.location?.courseDegrees ??
+    final phoneHeading =
+        phoneSensors.location?.courseDegrees ??
         phoneSensors.compassHeadingDegrees;
     final heading = snapshot.headingCardinal == '—' && phoneHeading != null
         ? '${phoneHeading.round()}° phone'
@@ -366,7 +375,9 @@ class _MetricsRow extends StatelessWidget {
             icon: Icons.favorite_rounded,
             iconColor: ObuColors.red,
             label: 'Heart rate',
-            value: snapshot.heartRateBpm == 0 ? '—' : '${snapshot.heartRateBpm} bpm',
+            value: snapshot.heartRateBpm == 0
+                ? '—'
+                : '${snapshot.heartRateBpm} bpm',
           ),
         ),
         const SizedBox(width: 10),
@@ -374,7 +385,9 @@ class _MetricsRow extends StatelessWidget {
           child: _MetricCard(
             icon: Icons.loop_rounded,
             label: 'Cadence',
-            value: snapshot.cadenceRpm == 0 ? '—' : '${snapshot.cadenceRpm} rpm',
+            value: snapshot.cadenceRpm == 0
+                ? '—'
+                : '${snapshot.cadenceRpm} rpm',
           ),
         ),
       ],
@@ -418,9 +431,8 @@ class _MetricCard extends StatelessWidget {
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: ObuColors.muted,
-                      ),
+                  style: Theme.of(context).textTheme.labelSmall
+                      ?.copyWith(color: ObuColors.muted),
                 ),
                 Text(
                   value,
@@ -438,10 +450,7 @@ class _MetricCard extends StatelessWidget {
 }
 
 class _AttentionStrip extends StatelessWidget {
-  const _AttentionStrip({
-    required this.snapshot,
-    required this.settings,
-  });
+  const _AttentionStrip({required this.snapshot, required this.settings});
 
   final ObuSnapshot snapshot;
   final AppSettings settings;
@@ -482,7 +491,8 @@ class _AttentionStrip extends StatelessWidget {
           icon: Icons.construction_rounded,
           color: ObuColors.amber,
           title: hazard.title,
-          detail: hazard.distanceMeters.toString() +
+          detail:
+              hazard.distanceMeters.toString() +
               ' m · ' +
               (hazard.provenance == WarningProvenance.standardizedDenm
                   ? 'DENM'
@@ -538,7 +548,11 @@ class _AttentionChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: color.withValues(alpha: 0.55)),
         boxShadow: const <BoxShadow>[
-          BoxShadow(color: Color(0x15000000), blurRadius: 12, offset: Offset(0, 4)),
+          BoxShadow(
+            color: Color(0x15000000),
+            blurRadius: 12,
+            offset: Offset(0, 4),
+          ),
         ],
       ),
       child: Row(
@@ -560,9 +574,8 @@ class _AttentionChip extends StatelessWidget {
               Text(title, style: Theme.of(context).textTheme.labelLarge),
               Text(
                 detail,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: ObuColors.muted,
-                    ),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: ObuColors.muted),
               ),
             ],
           ),
@@ -672,45 +685,49 @@ class _CollisionOverlayState extends State<_CollisionOverlay> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Icon(Icons.warning_rounded, color: Colors.white, size: 82),
+                  const Icon(
+                    Icons.warning_rounded,
+                    color: Colors.white,
+                    size: 82,
+                  ),
                   const SizedBox(height: 18),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      widget.provenance ==
-                              WarningProvenance.standardizedDenm
+                      widget.provenance == WarningProvenance.standardizedDenm
                           ? 'STANDARDIZED DENM ALERT'
                           : 'EXPERIMENTAL INFERRED WARNING',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: ObuColors.red,
-                            fontWeight: FontWeight.w800,
-                          ),
+                        color: ObuColors.red,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 14),
                   Text(
                     'BRAKE',
                     style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 2,
-                        ),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 2,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     widget.timeToCollision == null
                         ? 'Collision risk ahead'
                         : 'Collision possible in '
-                            '${widget.timeToCollision!.toStringAsFixed(1)} s',
+                              '${widget.timeToCollision!.toStringAsFixed(1)} s',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
-                        ),
+                    style: Theme.of(context).textTheme.titleLarge
+                        ?.copyWith(color: Colors.white),
                   ),
                   const SizedBox(height: 18),
                   Text(

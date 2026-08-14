@@ -32,12 +32,12 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
     RideSessionManager? sessionManager,
     OtmPublisher? otmPublisher,
     RideBackgroundService? backgroundService,
-  })  : _settingsRepository =
-            settingsRepository ?? PersistentSettingsRepository(),
-        _dbcCatalog = dbcCatalog ?? DbcCatalog(),
-        _sessionManager = sessionManager ?? RideSessionManager(),
-        _otmPublisher = otmPublisher ?? MqttOtmPublisher(),
-        _backgroundService = backgroundService ?? RideBackgroundService();
+  }) : _settingsRepository =
+           settingsRepository ?? PersistentSettingsRepository(),
+       _dbcCatalog = dbcCatalog ?? DbcCatalog(),
+       _sessionManager = sessionManager ?? RideSessionManager(),
+       _otmPublisher = otmPublisher ?? MqttOtmPublisher(),
+       _backgroundService = backgroundService ?? RideBackgroundService();
 
   final ObuRepository _repository;
   final PhoneSensorsRepository _phoneSensors;
@@ -60,10 +60,12 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
   StreamSubscription<ReplayFrame>? _replayFrameSubscription;
 
   ObuSnapshot snapshot = ObuSnapshot.initial();
-  TransportDiagnostics diagnostics =
-      TransportDiagnostics.initial(transportName: 'Starting');
-  late PhoneSensorSnapshot phoneSensors =
-      PhoneSensorSnapshot.initial(_phoneSensors.mode);
+  TransportDiagnostics diagnostics = TransportDiagnostics.initial(
+    transportName: 'Starting',
+  );
+  late PhoneSensorSnapshot phoneSensors = PhoneSensorSnapshot.initial(
+    _phoneSensors.mode,
+  );
   NavigationState navigation = NavigationState.initial();
   AppSettings settings = AppSettings.defaults();
   OtmStatus otmStatus = OtmStatus.disabled();
@@ -129,18 +131,21 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
     });
     _diagnosticSubscription = _repository.diagnostics.listen((value) {
       diagnostics = value;
-      _sessionManager.recordSystemEvent('transport_diagnostics', <String, Object?>{
-        'phase': value.phase.name,
-        'receivedFrames': value.receivedFrames,
-        'lostSequences': value.lostSequences,
-        'outOfOrderSequences': value.outOfOrderSequences,
-        'overflowDrops': value.overflowDrops,
-        'sessionContinuity': value.sessionContinuity,
-        's3FirmwareVersion': value.s3FirmwareVersion,
-        'c5FirmwareVersion': value.c5FirmwareVersion,
-        'clockSyncState': value.clockSyncState,
-        'clockSyncQuality': value.clockSyncQuality,
-      });
+      _sessionManager.recordSystemEvent(
+        'transport_diagnostics',
+        <String, Object?>{
+          'phase': value.phase.name,
+          'receivedFrames': value.receivedFrames,
+          'lostSequences': value.lostSequences,
+          'outOfOrderSequences': value.outOfOrderSequences,
+          'overflowDrops': value.overflowDrops,
+          'sessionContinuity': value.sessionContinuity,
+          's3FirmwareVersion': value.s3FirmwareVersion,
+          'c5FirmwareVersion': value.c5FirmwareVersion,
+          'clockSyncState': value.clockSyncState,
+          'clockSyncQuality': value.clockSyncQuality,
+        },
+      );
       notifyListeners();
     });
     _recordSubscription = _repository.records.listen((value) {
@@ -148,10 +153,7 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
       _sessionManager.recordData(value);
       _decodeCanRecord(value);
       unawaited(
-        _otmPublisher.publish(
-          value,
-          replayActive: replayStatus.active,
-        ),
+        _otmPublisher.publish(value, replayActive: replayStatus.active),
       );
     });
     _phoneSensorSubscription = _phoneSensors.snapshots.listen((value) {
@@ -205,7 +207,8 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
 
   void _decodeCanRecord(ObuDataRecord record) {
     if (!record.channel.toLowerCase().contains('can')) return;
-    final identifierValue = record.payload['identifier'] ??
+    final identifierValue =
+        record.payload['identifier'] ??
         record.payload['canId'] ??
         record.payload['id'];
     final identifier = identifierValue is num
@@ -347,11 +350,13 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
             .map((point) => <double>[point.latitude, point.longitude])
             .toList(growable: false),
         'maneuvers': route.steps
-            .map((step) => <String, Object?>{
-                  'instruction': step.instruction,
-                  'street': step.street,
-                  'distanceMeters': step.distanceMeters,
-                })
+            .map(
+              (step) => <String, Object?>{
+                'instruction': step.instruction,
+                'street': step.street,
+                'distanceMeters': step.distanceMeters,
+              },
+            )
             .toList(growable: false),
       });
     } catch (error) {
@@ -413,9 +418,7 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
     final previous = settings;
     final previousOtm = previous.otm;
     settings = next;
-    _repository.setComfortableMaximumSpeed(
-      next.comfortableMaximumSpeedKmh,
-    );
+    _repository.setComfortableMaximumSpeed(next.comfortableMaximumSpeedKmh);
     _replayCitsProcessor.setComfortableMaximumSpeed(
       next.comfortableMaximumSpeedKmh,
     );
@@ -545,11 +548,13 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
     _replayCitsProcessor.reset();
     return _sessionManager.stopReplay();
   }
+
   void setReplaySpeed(double speed) => _sessionManager.setReplaySpeed(speed);
   void seekReplay(Duration position) {
     _replayCitsProcessor.reset();
     _sessionManager.seekReplay(position);
   }
+
   Future<File> exportCsv(RideSessionSummary session) =>
       _sessionManager.exportCsv(session);
   Future<File> exportPcapng(RideSessionSummary session) =>
@@ -570,10 +575,9 @@ class ObuController extends ChangeNotifier with WidgetsBindingObserver {
         state == AppLifecycleState.detached) {
       _backgroundedAt = now;
       backgroundState = isRecording ? 'background requested' : 'background';
-      _sessionManager.recordSystemEvent(
-        'app_backgrounded',
-        <String, Object?>{'recording': isRecording},
-      );
+      _sessionManager.recordSystemEvent('app_backgrounded', <String, Object?>{
+        'recording': isRecording,
+      });
     } else if (state == AppLifecycleState.resumed) {
       final backgroundedAt = _backgroundedAt;
       if (backgroundedAt != null) {

@@ -1,10 +1,7 @@
 import 'package:latlong2/latlong.dart';
 
 class PlaceSuggestion {
-  const PlaceSuggestion({
-    required this.name,
-    required this.location,
-  });
+  const PlaceSuggestion({required this.name, required this.location});
 
   final String name;
   final LatLng location;
@@ -55,13 +52,13 @@ class NavigationState {
   });
 
   factory NavigationState.initial() => const NavigationState(
-        status: NavigationStatus.idle,
-        route: null,
-        currentStepIndex: 0,
-        distanceToNextStepMeters: null,
-        searchResults: <PlaceSuggestion>[],
-        error: null,
-      );
+    status: NavigationStatus.idle,
+    route: null,
+    currentStepIndex: 0,
+    distanceToNextStepMeters: null,
+    searchResults: <PlaceSuggestion>[],
+    error: null,
+  );
 
   final NavigationStatus status;
   final NavigationRoute? route;
@@ -88,13 +85,13 @@ class NavigationState {
     bool clearDistance = false,
     bool clearError = false,
   }) => NavigationState(
-        status: status ?? this.status,
-        route: clearRoute ? null : route ?? this.route,
-        currentStepIndex: currentStepIndex ?? this.currentStepIndex,
-        distanceToNextStepMeters: clearDistance
-            ? null
-            : distanceToNextStepMeters ?? this.distanceToNextStepMeters,
-        searchResults: searchResults ?? this.searchResults,
-        error: clearError ? null : error ?? this.error,
-      );
+    status: status ?? this.status,
+    route: clearRoute ? null : route ?? this.route,
+    currentStepIndex: currentStepIndex ?? this.currentStepIndex,
+    distanceToNextStepMeters: clearDistance
+        ? null
+        : distanceToNextStepMeters ?? this.distanceToNextStepMeters,
+    searchResults: searchResults ?? this.searchResults,
+    error: clearError ? null : error ?? this.error,
+  );
 }

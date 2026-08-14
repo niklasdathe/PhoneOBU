@@ -63,14 +63,16 @@ class GlosaService {
         GlosaAvailability.ambiguousAssociation,
       );
     }
-    if (input.mapemTimestamp
-            .isBefore(evaluatedAt.subtract(mapemMaximumAge)) ||
-        input.mapemTimestamp
-            .isAfter(evaluatedAt.add(const Duration(seconds: 1))) ||
-        input.spatemTimestamp
-            .isBefore(evaluatedAt.subtract(spatemMaximumAge)) ||
-        input.spatemTimestamp
-            .isAfter(evaluatedAt.add(const Duration(seconds: 1))) ||
+    if (input.mapemTimestamp.isBefore(evaluatedAt.subtract(mapemMaximumAge)) ||
+        input.mapemTimestamp.isAfter(
+          evaluatedAt.add(const Duration(seconds: 1)),
+        ) ||
+        input.spatemTimestamp.isBefore(
+          evaluatedAt.subtract(spatemMaximumAge),
+        ) ||
+        input.spatemTimestamp.isAfter(
+          evaluatedAt.add(const Duration(seconds: 1)),
+        ) ||
         input.validUntil.isBefore(evaluatedAt)) {
       return GlosaRecommendation.unavailable(GlosaAvailability.stale);
     }
@@ -114,15 +116,11 @@ class GlosaService {
         mapemTimestamp: input.mapemTimestamp,
         spatemTimestamp: input.spatemTimestamp,
         targetsLaterGreen: index > 0 || earliest > 0,
-        statusDetail: earliest > 0
-            ? 'Targeting later green'
-            : 'Green now',
+        statusDetail: earliest > 0 ? 'Targeting later green' : 'Green now',
         validUntil: input.validUntil,
       );
     }
 
-    return GlosaRecommendation.unavailable(
-      GlosaAvailability.noReachableGreen,
-    );
+    return GlosaRecommendation.unavailable(GlosaAvailability.noReachableGreen);
   }
 }

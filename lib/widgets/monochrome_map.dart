@@ -52,15 +52,32 @@ class _MonochromeMapState extends State<MonochromeMap> {
         : LatLng(location.latitude, location.longitude);
     final route = widget.navigation.route;
     return Semantics(
-      label: 'Live OpenStreetMap navigation map. Long press to route to a point.',
+      label:
+          'Live OpenStreetMap navigation map. Long press to route to a point.',
       child: Stack(
         children: <Widget>[
           ColorFiltered(
             colorFilter: const ColorFilter.matrix(<double>[
-              0.33, 0.33, 0.33, 0, 0,
-              0.33, 0.33, 0.33, 0, 0,
-              0.33, 0.33, 0.33, 0, 0,
-              0, 0, 0, 1, 0,
+              0.33,
+              0.33,
+              0.33,
+              0,
+              0,
+              0.33,
+              0.33,
+              0.33,
+              0,
+              0,
+              0.33,
+              0.33,
+              0.33,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
             ]),
             child: FlutterMap(
               mapController: _mapController,
@@ -98,7 +115,8 @@ class _MonochromeMapState extends State<MonochromeMap> {
                       width: 46,
                       height: 46,
                       child: _LocationMarker(
-                        heading: location?.courseDegrees ??
+                        heading:
+                            location?.courseDegrees ??
                             widget.phoneSensors.compassHeadingDegrees ??
                             0,
                       ),

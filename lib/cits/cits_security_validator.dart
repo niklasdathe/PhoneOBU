@@ -14,10 +14,10 @@ class CitsVerificationResult {
   final String detail;
 
   Map<String, String> toJson() => <String, String>{
-        'state': state.name,
-        'validatorId': validatorId,
-        'detail': detail,
-      };
+    'state': state.name,
+    'validatorId': validatorId,
+    'detail': detail,
+  };
 }
 
 abstract interface class CitsSecurityValidator {

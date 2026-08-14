@@ -72,8 +72,7 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        settings.comfortableMaximumSpeedKmh
-                                .toStringAsFixed(0) +
+                        settings.comfortableMaximumSpeedKmh.toStringAsFixed(0) +
                             ' km/h',
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
@@ -84,8 +83,8 @@ class SettingsScreen extends StatelessWidget {
                     max: 45,
                     divisions: 35,
                     value: settings.comfortableMaximumSpeedKmh,
-                    label: settings.comfortableMaximumSpeedKmh
-                            .toStringAsFixed(0) +
+                    label:
+                        settings.comfortableMaximumSpeedKmh.toStringAsFixed(0) +
                         ' km/h',
                     onChanged: (value) => _save(
                       context,
@@ -117,8 +116,10 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 const Divider(),
                 const ListTile(
-                  leading:
-                      Icon(Icons.crisis_alert_rounded, color: ObuColors.red),
+                  leading: Icon(
+                    Icons.crisis_alert_rounded,
+                    color: ObuColors.red,
+                  ),
                   title: Text('Critical warning display and sound'),
                   subtitle: Text('Always active during a ride'),
                   trailing: Icon(Icons.lock_outline_rounded),
@@ -139,8 +140,10 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 const Divider(),
                 SwitchListTile(
-                  secondary:
-                      const Icon(Icons.swap_vert_rounded, color: ObuColors.blue),
+                  secondary: const Icon(
+                    Icons.swap_vert_rounded,
+                    color: ObuColors.blue,
+                  ),
                   title: const Text('Gear recommendations'),
                   value: settings.shiftRecommendations,
                   onChanged: (value) => _save(
@@ -168,17 +171,16 @@ class SettingsScreen extends StatelessWidget {
           Card(
             child: Column(
               children: <Widget>[
-                for (var index = 0;
-                    index < settings.sensorConfigurations.length;
-                    index++) ...<Widget>[
+                for (
+                  var index = 0;
+                  index < settings.sensorConfigurations.length;
+                  index++
+                ) ...<Widget>[
                   if (index > 0) const Divider(),
                   _SensorConfigurationTile(
                     configuration: settings.sensorConfigurations[index],
-                    onChanged: (value) => _configureSensor(
-                      context,
-                      controller,
-                      value,
-                    ),
+                    onChanged: (value) =>
+                        _configureSensor(context, controller, value),
                   ),
                 ],
               ],
@@ -255,8 +257,7 @@ class SettingsScreen extends StatelessWidget {
                         controller.setDbcEnabled(definition.hash, value),
                     secondary: IconButton(
                       tooltip: 'Remove DBC',
-                      onPressed: () =>
-                          controller.removeDbc(definition.hash),
+                      onPressed: () => controller.removeDbc(definition.hash),
                       icon: const Icon(Icons.delete_outline_rounded),
                     ),
                   ),
@@ -276,11 +277,8 @@ class SettingsScreen extends StatelessWidget {
                     'Explicit opt-in · raw live frames only · no outage catch-up',
                   ),
                   value: settings.otm.enabled,
-                  onChanged: (value) => _setOtmEnabled(
-                    context,
-                    controller,
-                    value,
-                  ),
+                  onChanged: (value) =>
+                      _setOtmEnabled(context, controller, value),
                 ),
                 const Divider(),
                 ListTile(
@@ -473,10 +471,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _editOtm(
-    BuildContext context,
-    ObuController controller,
-  ) async {
+  Future<void> _editOtm(BuildContext context, ObuController controller) async {
     final host = TextEditingController(text: controller.settings.otm.host);
     final port = TextEditingController(
       text: controller.settings.otm.port.toString(),
@@ -580,8 +575,9 @@ class SettingsScreen extends StatelessWidget {
               for (var index = 0; index < values.length; index++)
                 TextField(
                   controller: values[index],
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   decoration: InputDecoration(
                     labelText: const <String>[
                       'x forward (m)',
@@ -603,8 +599,9 @@ class SettingsScreen extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () {
-              final parsed =
-                  values.map((item) => double.tryParse(item.text)).toList();
+              final parsed = values
+                  .map((item) => double.tryParse(item.text))
+                  .toList();
               if (id.text.trim().isEmpty ||
                   name.text.trim().isEmpty ||
                   parsed.any((item) => item == null)) {
@@ -664,7 +661,8 @@ class _SensorConfigurationTile extends StatelessWidget {
             .toList(growable: false),
         onChanged: configuration.enabled
             ? (value) {
-                if (value != null) onChanged(configuration.copyWith(rateHz: value));
+                if (value != null)
+                  onChanged(configuration.copyWith(rateHz: value));
               }
             : null,
       ),

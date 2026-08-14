@@ -5,7 +5,9 @@ import '../../models/phone_sensor_snapshot.dart';
 import 'phone_sensors_repository.dart';
 
 class DemoPhoneSensorsRepository implements PhoneSensorsRepository {
-  final _controller = StreamController<PhoneSensorSnapshot>.broadcast(sync: true);
+  final _controller = StreamController<PhoneSensorSnapshot>.broadcast(
+    sync: true,
+  );
   Timer? _timer;
   double _time = 0;
 

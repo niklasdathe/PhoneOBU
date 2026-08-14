@@ -33,17 +33,17 @@ class ObuDataRecord {
   bool get mayUploadToOtm => isRawV2x && origin == RecordOrigin.live;
 
   Map<String, Object?> toJson() => <String, Object?>{
-        'channel': channel,
-        'source': source,
-        'acquisitionTime': acquisitionTime.toUtc().toIso8601String(),
-        'arrivalTime': arrivalTime.toUtc().toIso8601String(),
-        'sequence': sequence,
-        'origin': origin.name,
-        'provenance': provenance.name,
-        'payload': payload,
-        if (rawBytes != null) 'rawBase64': base64Encode(rawBytes!),
-        'isRawV2x': isRawV2x,
-      };
+    'channel': channel,
+    'source': source,
+    'acquisitionTime': acquisitionTime.toUtc().toIso8601String(),
+    'arrivalTime': arrivalTime.toUtc().toIso8601String(),
+    'sequence': sequence,
+    'origin': origin.name,
+    'provenance': provenance.name,
+    'payload': payload,
+    if (rawBytes != null) 'rawBase64': base64Encode(rawBytes!),
+    'isRawV2x': isRawV2x,
+  };
 
   factory ObuDataRecord.fromJson(Map<String, Object?> json) {
     final raw = json['rawBase64']?.toString();
@@ -62,8 +62,9 @@ class ObuDataRecord {
         orElse: () => RecordProvenance.event,
       ),
       payload: json['payload'] is Map<Object?, Object?>
-          ? (json['payload']! as Map<Object?, Object?>)
-              .map((key, value) => MapEntry(key.toString(), value))
+          ? (json['payload']! as Map<Object?, Object?>).map(
+              (key, value) => MapEntry(key.toString(), value),
+            )
           : const <String, Object?>{},
       rawBytes: raw == null ? null : base64Decode(raw),
       isRawV2x: json['isRawV2x'] == true,

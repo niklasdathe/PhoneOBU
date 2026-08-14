@@ -9,10 +9,9 @@ void main() {
     final raw = Uint8List.fromList(const <int>[0x01, 0x02, 0x03]);
     final before = Uint8List.fromList(raw);
 
-    final result = validator.validate(
-      raw,
-      const <String, Object?>{'messageSet': 'CAM'},
-    );
+    final result = validator.validate(raw, const <String, Object?>{
+      'messageSet': 'CAM',
+    });
 
     expect(result.state, CitsVerificationState.notConfigured);
     expect(raw, orderedEquals(before));

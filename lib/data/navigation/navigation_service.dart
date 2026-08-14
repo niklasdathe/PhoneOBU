@@ -18,7 +18,8 @@ abstract interface class NavigationService {
 }
 
 class OpenNavigationService implements NavigationService {
-  OpenNavigationService({http.Client? client}) : _client = client ?? http.Client();
+  OpenNavigationService({http.Client? client})
+    : _client = client ?? http.Client();
 
   final http.Client _client;
 
@@ -53,16 +54,18 @@ class OpenNavigationService implements NavigationService {
       throw StateError('Place search failed (${response.statusCode}).');
     }
     final data = jsonDecode(response.body) as List<dynamic>;
-    return data.map((raw) {
-      final item = raw as Map<String, dynamic>;
-      return PlaceSuggestion(
-        name: item['display_name']?.toString() ?? 'Selected destination',
-        location: LatLng(
-          double.parse(item['lat'].toString()),
-          double.parse(item['lon'].toString()),
-        ),
-      );
-    }).toList(growable: false);
+    return data
+        .map((raw) {
+          final item = raw as Map<String, dynamic>;
+          return PlaceSuggestion(
+            name: item['display_name']?.toString() ?? 'Selected destination',
+            location: LatLng(
+              double.parse(item['lat'].toString()),
+              double.parse(item['lon'].toString()),
+            ),
+          );
+        })
+        .toList(growable: false);
   }
 
   @override
@@ -102,7 +105,9 @@ class OpenNavigationService implements NavigationService {
     final root = jsonDecode(response.body) as Map<String, dynamic>;
     final trip = root['trip'] as Map<String, dynamic>?;
     if (trip == null || trip['status'] != 0) {
-      throw StateError(trip?['status_message']?.toString() ?? 'No route was found.');
+      throw StateError(
+        trip?['status_message']?.toString() ?? 'No route was found.',
+      );
     }
     final summary = trip['summary'] as Map<String, dynamic>;
     final legs = trip['legs'] as List<dynamic>? ?? const <dynamic>[];
@@ -118,13 +123,16 @@ class OpenNavigationService implements NavigationService {
         final maneuver = rawManeuver as Map<String, dynamic>;
         final shapeIndex =
             (maneuver['begin_shape_index'] as num?)?.toInt() ?? 0;
-        final pointIndex =
-            (pointOffset + shapeIndex).clamp(0, points.length - 1).toInt();
+        final pointIndex = (pointOffset + shapeIndex)
+            .clamp(0, points.length - 1)
+            .toInt();
         final location = points[pointIndex];
         steps.add(
           RouteStep(
             instruction: maneuver['instruction']?.toString() ?? 'Continue',
-            street: (maneuver['street_names'] as List<dynamic>?)?.isNotEmpty ?? false
+            street:
+                (maneuver['street_names'] as List<dynamic>?)?.isNotEmpty ??
+                    false
                 ? (maneuver['street_names'] as List<dynamic>).first.toString()
                 : 'Unnamed road',
             distanceMeters:
@@ -165,7 +173,8 @@ class OpenNavigationService implements NavigationService {
     int value;
     do {
       final index = nextIndex();
-      if (index >= encoded.length) throw const FormatException('Invalid route shape.');
+      if (index >= encoded.length)
+        throw const FormatException('Invalid route shape.');
       value = encoded.codeUnitAt(index) - 63;
       result |= (value & 0x1f) << shift;
       shift += 5;

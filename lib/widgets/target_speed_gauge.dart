@@ -21,24 +21,21 @@ class TargetSpeedGauge extends StatelessWidget {
     final delta = target == null ? null : target - speedKmh;
     final semantic = target == null
         ? 'Current speed ' +
-            speedKmh.round().toString() +
-            ' kilometers per hour. Green wave recommendation unavailable. ' +
-            glosa.statusDetail
+              speedKmh.round().toString() +
+              ' kilometers per hour. Green wave recommendation unavailable. ' +
+              glosa.statusDetail
         : 'Current speed ' +
-            speedKmh.round().toString() +
-            ' kilometers per hour. Target speed ' +
-            target.round().toString() +
-            ' for the next green light.';
+              speedKmh.round().toString() +
+              ' kilometers per hour. Target speed ' +
+              target.round().toString() +
+              ' for the next green light.';
     return Semantics(
       label: semantic,
       child: SizedBox(
         width: 246,
         height: 216,
         child: CustomPaint(
-          painter: _GaugePainter(
-            speedKmh: speedKmh,
-            targetSpeedKmh: target,
-          ),
+          painter: _GaugePainter(speedKmh: speedKmh, targetSpeedKmh: target),
           child: Padding(
             padding: const EdgeInsets.only(top: 42),
             child: Column(
@@ -47,22 +44,23 @@ class TargetSpeedGauge extends StatelessWidget {
                 Text(
                   speedKmh.round().toString(),
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        color: ObuColors.ink,
-                        fontSize: 68,
-                        height: 0.95,
-                      ),
+                    color: ObuColors.ink,
+                    fontSize: 68,
+                    height: 0.95,
+                  ),
                 ),
                 Text(
                   'km/h',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: ObuColors.muted,
-                      ),
+                  style: Theme.of(context).textTheme.labelMedium
+                      ?.copyWith(color: ObuColors.muted),
                 ),
                 const SizedBox(height: 11),
                 Container(
                   constraints: const BoxConstraints(maxWidth: 228),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 7,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -101,9 +99,8 @@ class TargetSpeedGauge extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(
                     _countdownLabel(),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: ObuColors.muted,
-                        ),
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: ObuColors.muted),
                   ),
                 ],
               ],
@@ -139,10 +136,7 @@ class TargetSpeedGauge extends StatelessWidget {
 }
 
 class _GaugePainter extends CustomPainter {
-  _GaugePainter({
-    required this.speedKmh,
-    required this.targetSpeedKmh,
-  });
+  _GaugePainter({required this.speedKmh, required this.targetSpeedKmh});
 
   final double speedKmh;
   final double? targetSpeedKmh;
@@ -165,11 +159,11 @@ class _GaugePainter extends CustomPainter {
       35,
       math.max(speedKmh, targetSpeedKmh ?? 0),
     );
-    final speedFraction =
-        (speedKmh / displayMaximum).clamp(0.0, 1.0).toDouble();
+    final speedFraction = (speedKmh / displayMaximum)
+        .clamp(0.0, 1.0)
+        .toDouble();
     final active = Paint()
-      ..color =
-          targetSpeedKmh == null ? ObuColors.ink : ObuColors.green
+      ..color = targetSpeedKmh == null ? ObuColors.ink : ObuColors.green
       ..style = PaintingStyle.stroke
       ..strokeWidth = 11
       ..strokeCap = StrokeCap.round;
@@ -177,8 +171,7 @@ class _GaugePainter extends CustomPainter {
 
     final target = targetSpeedKmh;
     if (target == null) return;
-    final targetFraction =
-        (target / displayMaximum).clamp(0.0, 1.0).toDouble();
+    final targetFraction = (target / displayMaximum).clamp(0.0, 1.0).toDouble();
     final targetAngle = start + sweep * targetFraction;
     final outer = Offset(
       center.dx + math.cos(targetAngle) * (radius + 12),

@@ -31,11 +31,7 @@ class RideSessionSummary {
 }
 
 class ReplayFrame {
-  const ReplayFrame({
-    this.obuSnapshot,
-    this.phoneSensors,
-    this.dataRecord,
-  });
+  const ReplayFrame({this.obuSnapshot, this.phoneSensors, this.dataRecord});
 
   final ObuSnapshot? obuSnapshot;
   final PhoneSensorSnapshot? phoneSensors;
@@ -53,13 +49,13 @@ class ReplayStatus {
   });
 
   factory ReplayStatus.idle() => const ReplayStatus(
-        active: false,
-        playing: false,
-        speed: 1,
-        position: Duration.zero,
-        duration: Duration.zero,
-        session: null,
-      );
+    active: false,
+    playing: false,
+    speed: 1,
+    position: Duration.zero,
+    duration: Duration.zero,
+    session: null,
+  );
 
   final bool active;
   final bool playing;
@@ -91,10 +87,12 @@ class ReplayStatus {
 class RideSessionManager {
   final _sessionController =
       StreamController<List<RideSessionSummary>>.broadcast(sync: true);
-  final _replayFrameController =
-      StreamController<ReplayFrame>.broadcast(sync: true);
-  final _replayStatusController =
-      StreamController<ReplayStatus>.broadcast(sync: true);
+  final _replayFrameController = StreamController<ReplayFrame>.broadcast(
+    sync: true,
+  );
+  final _replayStatusController = StreamController<ReplayStatus>.broadcast(
+    sync: true,
+  );
 
   Directory? _directory;
   IOSink? _sink;
@@ -242,17 +240,19 @@ class RideSessionManager {
       if (row?['kind'] != 'data_record') continue;
       final data = _objectMap(row!['data']);
       final payload = jsonEncode(data['payload']);
-      sink.writeln(<String>[
-        data['acquisitionTime']?.toString() ?? '',
-        data['arrivalTime']?.toString() ?? '',
-        data['channel']?.toString() ?? '',
-        data['source']?.toString() ?? '',
-        data['origin']?.toString() ?? '',
-        data['provenance']?.toString() ?? '',
-        data['sequence']?.toString() ?? '',
-        payload,
-        data['rawBase64']?.toString() ?? '',
-      ].map(_csv).join(','));
+      sink.writeln(
+        <String>[
+          data['acquisitionTime']?.toString() ?? '',
+          data['arrivalTime']?.toString() ?? '',
+          data['channel']?.toString() ?? '',
+          data['source']?.toString() ?? '',
+          data['origin']?.toString() ?? '',
+          data['provenance']?.toString() ?? '',
+          data['sequence']?.toString() ?? '',
+          payload,
+          data['rawBase64']?.toString() ?? '',
+        ].map(_csv).join(','),
+      );
     }
     await sink.flush();
     await sink.close();
@@ -270,8 +270,8 @@ class RideSessionManager {
       final data = _objectMap(row!['data']);
       if (data['isRawV2x'] != true || data['rawBase64'] == null) continue;
       final bytes = base64Decode(data['rawBase64'].toString());
-      final timestamp =
-          DateTime.parse(data['acquisitionTime'].toString()).toUtc();
+      final timestamp = DateTime.parse(data['acquisitionTime'].toString())
+          .toUtc();
       builder.add(_enhancedPacketBlock(timestamp, bytes));
     }
     final output = File(session.path.replaceFirst('.jsonl', '.pcapng'));
@@ -342,17 +342,16 @@ class RideSessionManager {
   }
 
   void setReplaySpeed(double speed) {
-    _setReplayStatus(_replayStatus.copyWith(
-      speed: speed.clamp(0.25, 16).toDouble(),
-    ));
+    _setReplayStatus(
+      _replayStatus.copyWith(speed: speed.clamp(0.25, 16).toDouble()),
+    );
   }
 
   void seekReplay(Duration position) {
     if (!_replayStatus.active || _replayEntries.isEmpty) return;
-    final clampedMicros = position.inMicroseconds.clamp(
-      0,
-      _replayStatus.duration.inMicroseconds,
-    ).toInt();
+    final clampedMicros = position.inMicroseconds
+        .clamp(0, _replayStatus.duration.inMicroseconds)
+        .toInt();
     final clamped = Duration(microseconds: clampedMicros);
     _replayIndex = 0;
     _setReplayStatus(_replayStatus.copyWith(position: clamped));
@@ -366,8 +365,7 @@ class RideSessionManager {
     final elapsed = now.difference(_lastReplayTick ?? now);
     _lastReplayTick = now;
     final advanced = Duration(
-      microseconds:
-          (elapsed.inMicroseconds * _replayStatus.speed).round(),
+      microseconds: (elapsed.inMicroseconds * _replayStatus.speed).round(),
     );
     final next = _replayStatus.position + advanced;
     if (next >= _replayStatus.duration) {
@@ -389,9 +387,8 @@ class RideSessionManager {
       if (kind == 'obu_snapshot') {
         _replayFrameController.add(
           ReplayFrame(
-            obuSnapshot: ObuSnapshot.fromJson(data).copyWith(
-              freshness: DataFreshness.replay,
-            ),
+            obuSnapshot: ObuSnapshot.fromJson(data)
+                .copyWith(freshness: DataFreshness.replay),
           ),
         );
       } else if (kind == 'phone_sensors') {
@@ -438,7 +435,10 @@ class RideSessionManager {
       DateTime? startedAt;
       DateTime? endedAt;
       await for (final line
-          in file.openRead().transform(utf8.decoder).transform(const LineSplitter())) {
+          in file
+              .openRead()
+              .transform(utf8.decoder)
+              .transform(const LineSplitter())) {
         final row = _decodeLine(line);
         if (row == null) continue;
         final timestamp = DateTime.tryParse(row['timestamp']?.toString() ?? '');

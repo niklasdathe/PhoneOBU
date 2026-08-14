@@ -45,10 +45,7 @@ class SessionsScreen extends StatelessWidget {
             )
           else
             for (final session in controller.rideSessions)
-              _SessionCard(
-                session: session,
-                controller: controller,
-              ),
+              _SessionCard(session: session, controller: controller),
         ],
       ),
     );
@@ -74,7 +71,9 @@ class _RecordingCard extends StatelessWidget {
                   controller.isRecording
                       ? Icons.fiber_manual_record_rounded
                       : Icons.radio_button_unchecked_rounded,
-                  color: controller.isRecording ? ObuColors.red : ObuColors.muted,
+                  color: controller.isRecording
+                      ? ObuColors.red
+                      : ObuColors.muted,
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -91,9 +90,8 @@ class _RecordingCard extends StatelessWidget {
             Text(
               'The canonical session contains OBU data, raw V2X, phone sensors, '
               'warnings, GLOSA, configuration and provenance in one JSONL file.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: ObuColors.muted,
-                  ),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: ObuColors.muted),
             ),
             const SizedBox(height: 14),
             FilledButton.icon(
@@ -127,7 +125,9 @@ class _ReplayCard extends StatelessWidget {
     final max = replay.duration.inMilliseconds <= 0
         ? 1.0
         : replay.duration.inMilliseconds.toDouble();
-    final value = replay.position.inMilliseconds.clamp(0, max.toInt()).toDouble();
+    final value = replay.position.inMilliseconds
+        .clamp(0, max.toInt())
+        .toDouble();
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -149,8 +149,9 @@ class _ReplayCard extends StatelessWidget {
               children: <Widget>[
                 IconButton.filledTonal(
                   tooltip: replay.playing ? 'Pause replay' : 'Play replay',
-                  onPressed:
-                      replay.playing ? controller.pauseReplay : controller.playReplay,
+                  onPressed: replay.playing
+                      ? controller.pauseReplay
+                      : controller.playReplay,
                   icon: Icon(
                     replay.playing
                         ? Icons.pause_rounded
@@ -193,10 +194,7 @@ class _ReplayCard extends StatelessWidget {
 }
 
 class _SessionCard extends StatelessWidget {
-  const _SessionCard({
-    required this.session,
-    required this.controller,
-  });
+  const _SessionCard({required this.session, required this.controller});
 
   final RideSessionSummary session;
   final ObuController controller;
@@ -246,10 +244,8 @@ class _SessionCard extends StatelessWidget {
                 label: const Text('PCAPNG'),
               ),
               OutlinedButton.icon(
-                onPressed: () => _share(
-                  File(session.path),
-                  'Canonical Bicycle OBU session',
-                ),
+                onPressed: () =>
+                    _share(File(session.path), 'Canonical Bicycle OBU session'),
                 icon: const Icon(Icons.ios_share_rounded),
                 label: const Text('Session'),
               ),
@@ -277,15 +273,9 @@ class _SessionCard extends StatelessWidget {
     }
   }
 
-  Future<void> _share(
-    File file,
-    String label,
-  ) async {
+  Future<void> _share(File file, String label) async {
     await SharePlus.instance.share(
-      ShareParams(
-        subject: label,
-        files: <XFile>[XFile(file.path)],
-      ),
+      ShareParams(subject: label, files: <XFile>[XFile(file.path)]),
     );
   }
 

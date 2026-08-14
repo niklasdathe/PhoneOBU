@@ -36,8 +36,8 @@ class DiagnosticsScreen extends StatelessWidget {
         health: controller.otmStatus.state.name == 'connected'
             ? SubsystemHealth.online
             : controller.settings.otm.enabled
-                ? SubsystemHealth.degraded
-                : SubsystemHealth.offline,
+            ? SubsystemHealth.degraded
+            : SubsystemHealth.offline,
         detail: controller.settings.otm.enabled
             ? controller.otmStatus.state.name
             : 'OTM opt-in disabled',
@@ -62,7 +62,9 @@ class DiagnosticsScreen extends StatelessWidget {
           const Card(
             child: ListTile(
               leading: Icon(Icons.science_outlined, color: ObuColors.red),
-              title: Text('Research prototype · safety functions not certified'),
+              title: Text(
+                'Research prototype · safety functions not certified',
+              ),
               subtitle: Text(
                 'DENM alerts and experimental inferred warnings carry '
                 'separate provenance.',
@@ -82,7 +84,8 @@ class DiagnosticsScreen extends StatelessWidget {
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
             ),
-            itemBuilder: (context, index) => _SubsystemCard(status: subsystems[index]),
+            itemBuilder: (context, index) =>
+                _SubsystemCard(status: subsystems[index]),
           ),
           const SizedBox(height: 24),
           Text('Phone sensors', style: Theme.of(context).textTheme.titleLarge),
@@ -102,8 +105,8 @@ class DiagnosticsScreen extends StatelessWidget {
                   value: phone.location == null
                       ? _availability(phone.locationAvailability)
                       : '${phone.location!.latitude.toStringAsFixed(6)}, '
-                          '${phone.location!.longitude.toStringAsFixed(6)} '
-                          '±${phone.location!.horizontalAccuracyMeters.toStringAsFixed(1)} m',
+                            '${phone.location!.longitude.toStringAsFixed(6)} '
+                            '±${phone.location!.horizontalAccuracyMeters.toStringAsFixed(1)} m',
                 ),
                 const Divider(),
                 _DiagnosticRow(
@@ -111,8 +114,8 @@ class DiagnosticsScreen extends StatelessWidget {
                   value: phone.location == null
                       ? '—'
                       : '${phone.location!.altitudeMeters.toStringAsFixed(1)} m · '
-                          '${(phone.location!.speedMps * 3.6).toStringAsFixed(1)} km/h · '
-                          '${phone.location!.courseDegrees.toStringAsFixed(0)}°',
+                            '${(phone.location!.speedMps * 3.6).toStringAsFixed(1)} km/h · '
+                            '${phone.location!.courseDegrees.toStringAsFixed(0)}°',
                 ),
                 const Divider(),
                 _DiagnosticRow(
@@ -132,7 +135,8 @@ class DiagnosticsScreen extends StatelessWidget {
                 const Divider(),
                 _DiagnosticRow(
                   label: 'Magnetometer (µT) / compass',
-                  value: '${_vector(phone.magnetometer)} · '
+                  value:
+                      '${_vector(phone.magnetometer)} · '
                       '${phone.compassHeadingDegrees?.toStringAsFixed(0) ?? '—'}°',
                 ),
                 const Divider(),
@@ -148,12 +152,12 @@ class DiagnosticsScreen extends StatelessWidget {
                   value: phone.orientation == null
                       ? _availability(phone.orientationAvailability)
                       : 'roll ' +
-                          phone.orientation!.rollDegrees.toStringAsFixed(1) +
-                          '° · pitch ' +
-                          phone.orientation!.pitchDegrees.toStringAsFixed(1) +
-                          '° · yaw ' +
-                          phone.orientation!.yawDegrees.toStringAsFixed(1) +
-                          '°',
+                            phone.orientation!.rollDegrees.toStringAsFixed(1) +
+                            '° · pitch ' +
+                            phone.orientation!.pitchDegrees.toStringAsFixed(1) +
+                            '° · yaw ' +
+                            phone.orientation!.yawDegrees.toStringAsFixed(1) +
+                            '°',
                 ),
                 const Divider(),
                 const _DiagnosticRow(
@@ -189,9 +193,8 @@ class DiagnosticsScreen extends StatelessWidget {
                   label: 'Recommendation',
                   value: snapshot.glosa.recommendedSpeedKmh == null
                       ? '— · ' + snapshot.glosa.statusDetail
-                      : snapshot.glosa.recommendedSpeedKmh!
-                              .toStringAsFixed(1) +
-                          ' km/h',
+                      : snapshot.glosa.recommendedSpeedKmh!.toStringAsFixed(1) +
+                            ' km/h',
                 ),
                 const Divider(),
                 _DiagnosticRow(
@@ -199,15 +202,16 @@ class DiagnosticsScreen extends StatelessWidget {
                   value: snapshot.glosa.intersectionId == null
                       ? '—'
                       : (snapshot.glosa.intersectionName ?? 'Intersection') +
-                          ' · ID ' +
-                          snapshot.glosa.intersectionId.toString() +
-                          ' · SG ' +
-                          (snapshot.glosa.signalGroup?.toString() ?? '—'),
+                            ' · ID ' +
+                            snapshot.glosa.intersectionId.toString() +
+                            ' · SG ' +
+                            (snapshot.glosa.signalGroup?.toString() ?? '—'),
                 ),
                 const Divider(),
                 _DiagnosticRow(
                   label: 'MAPEM source time',
-                  value: snapshot.glosa.mapemTimestamp
+                  value:
+                      snapshot.glosa.mapemTimestamp
                           ?.toUtc()
                           .toIso8601String() ??
                       '—',
@@ -215,7 +219,8 @@ class DiagnosticsScreen extends StatelessWidget {
                 const Divider(),
                 _DiagnosticRow(
                   label: 'SPATEM source time',
-                  value: snapshot.glosa.spatemTimestamp
+                  value:
+                      snapshot.glosa.spatemTimestamp
                           ?.toUtc()
                           .toIso8601String() ??
                       '—',
@@ -223,9 +228,8 @@ class DiagnosticsScreen extends StatelessWidget {
                 const Divider(),
                 _DiagnosticRow(
                   label: 'Timing valid until',
-                  value: snapshot.glosa.validUntil
-                          ?.toUtc()
-                          .toIso8601String() ??
+                  value:
+                      snapshot.glosa.validUntil?.toUtc().toIso8601String() ??
                       '—',
                 ),
               ],
@@ -244,7 +248,8 @@ class DiagnosticsScreen extends StatelessWidget {
                 const Divider(),
                 _DiagnosticRow(
                   label: 'Firmware',
-                  value: 'S3 ' +
+                  value:
+                      'S3 ' +
                       diagnostics.s3FirmwareVersion +
                       ' · C5 ' +
                       diagnostics.c5FirmwareVersion,
@@ -252,14 +257,17 @@ class DiagnosticsScreen extends StatelessWidget {
                 const Divider(),
                 _DiagnosticRow(
                   label: 'Clock synchronization',
-                  value: diagnostics.clockSyncState +
+                  value:
+                      diagnostics.clockSyncState +
                       ' · ' +
                       diagnostics.clockSyncQuality,
                 ),
                 const Divider(),
                 _DiagnosticRow(
                   label: 'Negotiated MTU',
-                  value: diagnostics.negotiatedMtu?.toString() ?? 'OS managed / unknown',
+                  value:
+                      diagnostics.negotiatedMtu?.toString() ??
+                      'OS managed / unknown',
                 ),
                 const Divider(),
                 _DiagnosticRow(
@@ -329,7 +337,10 @@ class DiagnosticsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          Text('App data pipeline', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            'App data pipeline',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 10),
           Card(
             child: Column(
@@ -337,8 +348,9 @@ class DiagnosticsScreen extends StatelessWidget {
                 _DiagnosticRow(
                   label: 'Scientific recording',
                   value: controller.isRecording ? 'ACTIVE' : 'Stopped',
-                  valueColor:
-                      controller.isRecording ? ObuColors.red : ObuColors.muted,
+                  valueColor: controller.isRecording
+                      ? ObuColors.red
+                      : ObuColors.muted,
                 ),
                 const Divider(),
                 _DiagnosticRow(
@@ -350,8 +362,9 @@ class DiagnosticsScreen extends StatelessWidget {
                   label: 'Detected OS suspension',
                   value: controller.lastDetectedSuspension == null
                       ? 'None'
-                      : controller.lastDetectedSuspension!.inSeconds.toString() +
-                          ' s pipeline gap',
+                      : controller.lastDetectedSuspension!.inSeconds
+                                .toString() +
+                            ' s pipeline gap',
                   valueColor: controller.lastDetectedSuspension == null
                       ? ObuColors.green
                       : ObuColors.red,
@@ -364,7 +377,8 @@ class DiagnosticsScreen extends StatelessWidget {
                 const Divider(),
                 _DiagnosticRow(
                   label: 'OTM upload',
-                  value: controller.otmStatus.state.name +
+                  value:
+                      controller.otmStatus.state.name +
                       ' · ' +
                       controller.otmStatus.successful.toString() +
                       ' sent / ' +
@@ -387,9 +401,8 @@ class DiagnosticsScreen extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             'These commands exercise explicit success/failure responses. In demo mode they control the built-in scenarios.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: ObuColors.muted,
-                ),
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(color: ObuColors.muted),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -398,20 +411,14 @@ class DiagnosticsScreen extends StatelessWidget {
             children: <Widget>[
               FilledButton.icon(
                 style: FilledButton.styleFrom(backgroundColor: ObuColors.red),
-                onPressed: () => _runCommand(
-                  context,
-                  controller,
-                  'simulate_collision',
-                ),
+                onPressed: () =>
+                    _runCommand(context, controller, 'simulate_collision'),
                 icon: const Icon(Icons.warning_rounded),
                 label: const Text('Simulate collision'),
               ),
               OutlinedButton.icon(
-                onPressed: () => _runCommand(
-                  context,
-                  controller,
-                  'clear_collision',
-                ),
+                onPressed: () =>
+                    _runCommand(context, controller, 'clear_collision'),
                 icon: const Icon(Icons.clear_rounded),
                 label: const Text('Clear alarm'),
               ),
@@ -421,20 +428,14 @@ class DiagnosticsScreen extends StatelessWidget {
                 label: const Text('Reconnect'),
               ),
               OutlinedButton.icon(
-                onPressed: () => _runCommand(
-                  context,
-                  controller,
-                  'simulate_missing_spatem',
-                ),
+                onPressed: () =>
+                    _runCommand(context, controller, 'simulate_missing_spatem'),
                 icon: const Icon(Icons.timer_off_outlined),
                 label: const Text('Remove SPATEM'),
               ),
               OutlinedButton.icon(
-                onPressed: () => _runCommand(
-                  context,
-                  controller,
-                  'restore_spatem',
-                ),
+                onPressed: () =>
+                    _runCommand(context, controller, 'restore_spatem'),
                 icon: const Icon(Icons.restore_rounded),
                 label: const Text('Restore SPATEM'),
               ),
@@ -449,11 +450,11 @@ class DiagnosticsScreen extends StatelessWidget {
       '${value.x.toStringAsFixed(2)}, ${value.y.toStringAsFixed(2)}, ${value.z.toStringAsFixed(2)}';
 
   String _availability(SensorAvailability value) => switch (value) {
-        SensorAvailability.available => 'Available',
-        SensorAvailability.unavailable => 'Unavailable on this device',
-        SensorAvailability.permissionDenied => 'Permission denied',
-        SensorAvailability.error => 'Sensor error',
-      };
+    SensorAvailability.available => 'Available',
+    SensorAvailability.unavailable => 'Unavailable on this device',
+    SensorAvailability.permissionDenied => 'Permission denied',
+    SensorAvailability.error => 'Sensor error',
+  };
 
   Future<void> _runCommand(
     BuildContext context,
@@ -525,8 +526,9 @@ class _ConnectionHeader extends StatelessWidget {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: (connected ? ObuColors.green : ObuColors.red)
-                    .withValues(alpha: 0.12),
+                color: (connected ? ObuColors.green : ObuColors.red).withValues(
+                  alpha: 0.12,
+                ),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -543,9 +545,8 @@ class _ConnectionHeader extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     connected ? 'OBU link active' : _phaseLabel(phase),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 3),
                   Text(
@@ -553,8 +554,8 @@ class _ConnectionHeader extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: error == null ? ObuColors.muted : ObuColors.red,
-                        ),
+                      color: error == null ? ObuColors.muted : ObuColors.red,
+                    ),
                   ),
                 ],
               ),
@@ -596,12 +597,16 @@ class _SubsystemCard extends StatelessWidget {
                 Container(
                   width: 9,
                   height: 9,
-                  decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
                 ),
                 const Spacer(),
                 Text(
                   _healthLabel(status.health),
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color),
+                  style: Theme.of(context).textTheme.labelSmall
+                      ?.copyWith(color: color),
                 ),
               ],
             ),
@@ -617,9 +622,8 @@ class _SubsystemCard extends StatelessWidget {
               status.detail,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: ObuColors.muted,
-                  ),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: ObuColors.muted),
             ),
           ],
         ),
@@ -651,9 +655,8 @@ class _DiagnosticRow extends StatelessWidget {
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: valueColor,
-                  ),
+              style: Theme.of(context).textTheme.labelLarge
+                  ?.copyWith(color: valueColor),
             ),
           ),
         ],

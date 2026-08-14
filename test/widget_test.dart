@@ -11,7 +11,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 
 void main() {
-  testWidgets('ride screen exposes primary telemetry and navigation', (tester) async {
+  testWidgets('ride screen exposes primary telemetry and navigation', (
+    tester,
+  ) async {
     final repository = _StaticRepository();
     await tester.pumpWidget(
       ObuBootstrap(

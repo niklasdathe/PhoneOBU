@@ -16,8 +16,8 @@ class PersistentSettingsRepository implements SettingsRepository {
   PersistentSettingsRepository({
     SharedPreferencesAsync? preferences,
     FlutterSecureStorage? secureStorage,
-  })  : _preferences = preferences ?? SharedPreferencesAsync(),
-        _secureStorage = secureStorage ?? const FlutterSecureStorage();
+  }) : _preferences = preferences ?? SharedPreferencesAsync(),
+       _secureStorage = secureStorage ?? const FlutterSecureStorage();
 
   static const _settingsKey = 'bicycle_obu.settings.v1';
 

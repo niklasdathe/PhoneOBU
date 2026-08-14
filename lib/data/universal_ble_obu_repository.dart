@@ -24,11 +24,14 @@ class UniversalBleObuRepository implements ObuRepository {
     CitsSecurityValidator securityValidator = const NoCitsSecurityValidator(),
   }) : _securityValidator = securityValidator;
 
-  final _snapshotController = StreamController<ObuSnapshot>.broadcast(sync: true);
+  final _snapshotController = StreamController<ObuSnapshot>.broadcast(
+    sync: true,
+  );
   final _diagnosticsController =
       StreamController<TransportDiagnostics>.broadcast(sync: true);
-  final _recordController =
-      StreamController<ObuDataRecord>.broadcast(sync: true);
+  final _recordController = StreamController<ObuDataRecord>.broadcast(
+    sync: true,
+  );
   final _reassembler = ObuMessageReassembler();
   final _pendingCommands = <int, Completer<ObuCommandResult>>{};
   final _citsProcessor = CitsApplicationProcessor();
@@ -43,8 +46,9 @@ class UniversalBleObuRepository implements ObuRepository {
   BleDevice? _device;
   BleCharacteristic? _commandCharacteristic;
   ObuSnapshot _snapshot = ObuSnapshot.initial();
-  TransportDiagnostics _diagnostics =
-      TransportDiagnostics.initial(transportName: 'Universal BLE');
+  TransportDiagnostics _diagnostics = TransportDiagnostics.initial(
+    transportName: 'Universal BLE',
+  );
   bool _connecting = false;
   int _maxFragmentPayload = 4;
   int _sequence = 0;
@@ -98,7 +102,9 @@ class UniversalBleObuRepository implements ObuRepository {
       _scanTimeout = Timer(const Duration(seconds: 15), () async {
         if (_device == null) {
           await UniversalBle.stopScan();
-          _setError('No Bicycle OBU advertising the expected service was found.');
+          _setError(
+            'No Bicycle OBU advertising the expected service was found.',
+          );
         }
       });
     } catch (error) {
@@ -294,8 +300,9 @@ class UniversalBleObuRepository implements ObuRepository {
         collisionRisk: active,
         collisionTimeSeconds: _asNullableDouble(json['timeToCollisionS']),
         clearCollisionTime: !active,
-        collisionProvenance:
-            active ? WarningProvenance.inferredExperimental : null,
+        collisionProvenance: active
+            ? WarningProvenance.inferredExperimental
+            : null,
         clearCollisionProvenance: !active,
         collisionEventId: active
             ? json['eventId']?.toString() ?? 'inferred-collision'
@@ -353,37 +360,40 @@ class UniversalBleObuRepository implements ObuRepository {
         json['recoveredRecords'],
         _diagnostics.recoveredRecords,
       ),
-      overflowDrops: _asInt(
-        json['overflowDrops'],
-        _diagnostics.overflowDrops,
-      ),
+      overflowDrops: _asInt(json['overflowDrops'], _diagnostics.overflowDrops),
       authenticated: json['authenticated'] is bool
           ? json['authenticated'] as bool
           : _diagnostics.authenticated,
-      sessionContinuity: json['sessionContinuity']?.toString() ??
+      sessionContinuity:
+          json['sessionContinuity']?.toString() ??
           _diagnostics.sessionContinuity,
-      s3FirmwareVersion: json['s3FirmwareVersion']?.toString() ??
+      s3FirmwareVersion:
+          json['s3FirmwareVersion']?.toString() ??
           _diagnostics.s3FirmwareVersion,
-      c5FirmwareVersion: json['c5FirmwareVersion']?.toString() ??
+      c5FirmwareVersion:
+          json['c5FirmwareVersion']?.toString() ??
           _diagnostics.c5FirmwareVersion,
-      clockSyncState: json['clockSyncState']?.toString() ??
-          _diagnostics.clockSyncState,
-      clockSyncQuality: json['clockSyncQuality']?.toString() ??
-          _diagnostics.clockSyncQuality,
+      clockSyncState:
+          json['clockSyncState']?.toString() ?? _diagnostics.clockSyncState,
+      clockSyncQuality:
+          json['clockSyncQuality']?.toString() ?? _diagnostics.clockSyncQuality,
     );
     _diagnosticsController.add(_diagnostics);
     final raw = json['subsystems'];
     if (raw is! List) {
       return;
     }
-    final statuses = raw.whereType<Map>().map((entry) {
-      final map = entry.cast<Object?, Object?>();
-      return SubsystemStatus(
-        name: map['name']?.toString() ?? 'Unknown',
-        health: _health(map['state']?.toString()),
-        detail: map['detail']?.toString() ?? 'No detail',
-      );
-    }).toList(growable: false);
+    final statuses = raw
+        .whereType<Map>()
+        .map((entry) {
+          final map = entry.cast<Object?, Object?>();
+          return SubsystemStatus(
+            name: map['name']?.toString() ?? 'Unknown',
+            health: _health(map['state']?.toString()),
+            detail: map['detail']?.toString() ?? 'No detail',
+          );
+        })
+        .toList(growable: false);
     _snapshot = _snapshot.copyWith(
       receivedAt: DateTime.now(),
       subsystems: statuses,
@@ -406,8 +416,9 @@ class UniversalBleObuRepository implements ObuRepository {
         code: json['code']?.toString() ?? 'UNKNOWN',
         message: json['message']?.toString() ?? 'No response detail.',
         state: json['state'] is Map<Object?, Object?>
-            ? (json['state']! as Map<Object?, Object?>)
-                .map((key, value) => MapEntry(key.toString(), value))
+            ? (json['state']! as Map<Object?, Object?>).map(
+                (key, value) => MapEntry(key.toString(), value),
+              )
             : const <String, Object?>{},
       ),
     );
@@ -590,8 +601,9 @@ class UniversalBleObuRepository implements ObuRepository {
     }
     _recordController.add(
       ObuDataRecord(
-        channel:
-            message.type == MessageType.cits ? 'v2x/raw' : message.type.name,
+        channel: message.type == MessageType.cits
+            ? 'v2x/raw'
+            : message.type.name,
         source: message.source.name,
         acquisitionTime: acquisition,
         arrivalTime: arrival,
@@ -649,8 +661,7 @@ class UniversalBleObuRepository implements ObuRepository {
       }
       if (!_snapshot.obuConnected ||
           _snapshot.freshness != DataFreshness.live ||
-          now.difference(_snapshot.receivedAt) <=
-              const Duration(seconds: 3)) {
+          now.difference(_snapshot.receivedAt) <= const Duration(seconds: 3)) {
         if (changed) _snapshotController.add(_snapshot);
         return;
       }

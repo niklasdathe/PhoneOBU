@@ -1,10 +1,7 @@
 import 'cits_interpreter.dart';
 
 class WarningDecision {
-  const WarningDecision({
-    required this.shouldNotify,
-    required this.reason,
-  });
+  const WarningDecision({required this.shouldNotify, required this.reason});
 
   final bool shouldNotify;
   final String reason;
@@ -19,10 +16,7 @@ class WarningCoordinator {
     final evaluatedAt = now ?? DateTime.now();
     _activeEvents.removeWhere((_, expiry) => expiry.isBefore(evaluatedAt));
     if (event.expiresAt.isBefore(evaluatedAt)) {
-      return const WarningDecision(
-        shouldNotify: false,
-        reason: 'expired',
-      );
+      return const WarningDecision(shouldNotify: false, reason: 'expired');
     }
     if (!event.clearlyRelevant) {
       return const WarningDecision(

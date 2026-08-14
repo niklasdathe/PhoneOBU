@@ -8,9 +8,13 @@ import '../../models/phone_sensor_snapshot.dart';
 import 'phone_sensors_repository.dart';
 
 class LivePhoneSensorsRepository implements PhoneSensorsRepository {
-  final _controller = StreamController<PhoneSensorSnapshot>.broadcast(sync: true);
+  final _controller = StreamController<PhoneSensorSnapshot>.broadcast(
+    sync: true,
+  );
   final _subscriptions = <StreamSubscription<dynamic>>[];
-  PhoneSensorSnapshot _current = PhoneSensorSnapshot.initial(PhoneSensorMode.live);
+  PhoneSensorSnapshot _current = PhoneSensorSnapshot.initial(
+    PhoneSensorMode.live,
+  );
 
   @override
   PhoneSensorMode get mode => PhoneSensorMode.live;
@@ -27,26 +31,26 @@ class LivePhoneSensorsRepository implements PhoneSensorsRepository {
 
   void _listenMotionSensors() {
     _subscriptions.add(
-      accelerometerEventStream(samplingPeriod: SensorInterval.gameInterval).listen(
-        (event) => _update(
-          accelerometer: Vector3Reading(event.x, event.y, event.z),
-          accelerometerTimestamp: event.timestamp,
-          motionAvailability: SensorAvailability.available,
-        ),
-        onError: (Object error) => _sensorError(error, motion: true),
-      ),
+      accelerometerEventStream(samplingPeriod: SensorInterval.gameInterval)
+          .listen(
+            (event) => _update(
+              accelerometer: Vector3Reading(event.x, event.y, event.z),
+              accelerometerTimestamp: event.timestamp,
+              motionAvailability: SensorAvailability.available,
+            ),
+            onError: (Object error) => _sensorError(error, motion: true),
+          ),
     );
     _subscriptions.add(
-      userAccelerometerEventStream(
-        samplingPeriod: SensorInterval.gameInterval,
-      ).listen(
-        (event) => _update(
-          userAccelerometer: Vector3Reading(event.x, event.y, event.z),
-          userAccelerometerTimestamp: event.timestamp,
-          motionAvailability: SensorAvailability.available,
-        ),
-        onError: (Object error) => _sensorError(error, motion: true),
-      ),
+      userAccelerometerEventStream(samplingPeriod: SensorInterval.gameInterval)
+          .listen(
+            (event) => _update(
+              userAccelerometer: Vector3Reading(event.x, event.y, event.z),
+              userAccelerometerTimestamp: event.timestamp,
+              motionAvailability: SensorAvailability.available,
+            ),
+            onError: (Object error) => _sensorError(error, motion: true),
+          ),
     );
     _subscriptions.add(
       gyroscopeEventStream(samplingPeriod: SensorInterval.gameInterval).listen(
@@ -61,7 +65,8 @@ class LivePhoneSensorsRepository implements PhoneSensorsRepository {
     _subscriptions.add(
       magnetometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen(
         (event) {
-          final heading = (math.atan2(event.y, event.x) * 180 / math.pi + 360) % 360;
+          final heading =
+              (math.atan2(event.y, event.x) * 180 / math.pi + 360) % 360;
           _update(
             magnetometer: Vector3Reading(event.x, event.y, event.z),
             magnetometerTimestamp: event.timestamp,
@@ -79,14 +84,15 @@ class LivePhoneSensorsRepository implements PhoneSensorsRepository {
       ),
     );
     _subscriptions.add(
-      barometerEventStream(samplingPeriod: SensorInterval.normalInterval).listen(
-        (event) => _update(
-          pressureHpa: event.pressure,
-          barometerTimestamp: event.timestamp,
-          barometerAvailability: SensorAvailability.available,
-        ),
-        onError: (Object error) => _sensorError(error, barometer: true),
-      ),
+      barometerEventStream(samplingPeriod: SensorInterval.normalInterval)
+          .listen(
+            (event) => _update(
+              pressureHpa: event.pressure,
+              barometerTimestamp: event.timestamp,
+              barometerAvailability: SensorAvailability.available,
+            ),
+            onError: (Object error) => _sensorError(error, barometer: true),
+          ),
     );
   }
 
@@ -146,12 +152,11 @@ class LivePhoneSensorsRepository implements PhoneSensorsRepository {
     bool magnetometer = false,
     bool barometer = false,
   }) => _update(
-        motionAvailability: motion ? SensorAvailability.error : null,
-        magnetometerAvailability:
-            magnetometer ? SensorAvailability.error : null,
-        barometerAvailability: barometer ? SensorAvailability.error : null,
-        lastError: 'Phone sensor: $error',
-      );
+    motionAvailability: motion ? SensorAvailability.error : null,
+    magnetometerAvailability: magnetometer ? SensorAvailability.error : null,
+    barometerAvailability: barometer ? SensorAvailability.error : null,
+    lastError: 'Phone sensor: $error',
+  );
 
   void _update({
     Vector3Reading? accelerometer,
@@ -210,8 +215,7 @@ class LivePhoneSensorsRepository implements PhoneSensorsRepository {
     final pitch = math.atan2(
       -acceleration.x,
       math.sqrt(
-        acceleration.y * acceleration.y +
-            acceleration.z * acceleration.z,
+        acceleration.y * acceleration.y + acceleration.z * acceleration.z,
       ),
     );
     return DeviceOrientationReading(

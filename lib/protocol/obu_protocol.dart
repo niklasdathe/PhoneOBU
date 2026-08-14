@@ -142,7 +142,11 @@ abstract final class ObuFrameCodec {
     data.setUint8(10, frame.fragmentIndex);
     data.setUint8(11, frame.fragmentCount);
     data.setUint16(12, frame.payload.length, Endian.little);
-    bytes.setRange(headerLength, headerLength + frame.payload.length, frame.payload);
+    bytes.setRange(
+      headerLength,
+      headerLength + frame.payload.length,
+      frame.payload,
+    );
     data.setUint16(
       headerLength + frame.payload.length,
       crc16(bytes.sublist(0, headerLength + frame.payload.length)),
@@ -153,7 +157,9 @@ abstract final class ObuFrameCodec {
 
   static ObuFrame decodeFrame(Uint8List bytes) {
     if (bytes.length < headerLength + crcLength) {
-      throw const FormatException('BLE frame is shorter than the protocol header.');
+      throw const FormatException(
+        'BLE frame is shorter than the protocol header.',
+      );
     }
     final data = ByteData.sublistView(bytes);
     if (data.getUint16(0, Endian.little) != magic) {
@@ -166,7 +172,10 @@ abstract final class ObuFrameCodec {
         'BLE frame length ${bytes.length} does not match $expectedLength.',
       );
     }
-    final receivedCrc = data.getUint16(expectedLength - crcLength, Endian.little);
+    final receivedCrc = data.getUint16(
+      expectedLength - crcLength,
+      Endian.little,
+    );
     final calculatedCrc = crc16(bytes.sublist(0, expectedLength - crcLength));
     if (receivedCrc != calculatedCrc) {
       throw const FormatException('BLE frame CRC check failed.');
@@ -268,11 +277,7 @@ class ObuMessageReassembler {
     );
   }
 
-  void _trackSequence(
-    MessageSource source,
-    MessageType type,
-    int sequence,
-  ) {
+  void _trackSequence(MessageSource source, MessageType type, int sequence) {
     final stream = '${source.value}:${type.value}';
     final expected = _expectedSequenceByStream[stream];
     if (expected != null && sequence != expected) {

@@ -18,12 +18,12 @@ class OtmStatus {
   });
 
   factory OtmStatus.disabled() => const OtmStatus(
-        state: OtmConnectionState.disabled,
-        attempted: 0,
-        successful: 0,
-        failed: 0,
-        lastError: null,
-      );
+    state: OtmConnectionState.disabled,
+    attempted: 0,
+    successful: 0,
+    failed: 0,
+    lastError: null,
+  );
 
   final OtmConnectionState state;
   final int attempted;
@@ -78,32 +78,33 @@ class MqttOtmPublisher implements OtmPublisher {
     _configuration = configuration;
     await _disconnect();
     if (!configuration.enabled) {
-      _setStatus(_status.copyWith(
-        state: OtmConnectionState.disabled,
-        clearError: true,
-      ));
+      _setStatus(
+        _status.copyWith(state: OtmConnectionState.disabled, clearError: true),
+      );
       return;
     }
-    _setStatus(_status.copyWith(
-      state: OtmConnectionState.connecting,
-      clearError: true,
-    ));
-    final client = MqttServerClient.withPort(
-      configuration.host,
-      'bicycle-obu-' + configuration.nodeId,
-      configuration.port,
-    )
-      ..secure = true
-      ..keepAlivePeriod = 30
-      ..logging(on: false)
-      ..onDisconnected = () {
-        if (_configuration.enabled) {
-          _setStatus(_status.copyWith(
-            state: OtmConnectionState.error,
-            lastError: 'MQTT connection closed.',
-          ));
-        }
-      };
+    _setStatus(
+      _status.copyWith(state: OtmConnectionState.connecting, clearError: true),
+    );
+    final client =
+        MqttServerClient.withPort(
+            configuration.host,
+            'bicycle-obu-' + configuration.nodeId,
+            configuration.port,
+          )
+          ..secure = true
+          ..keepAlivePeriod = 30
+          ..logging(on: false)
+          ..onDisconnected = () {
+            if (_configuration.enabled) {
+              _setStatus(
+                _status.copyWith(
+                  state: OtmConnectionState.error,
+                  lastError: 'MQTT connection closed.',
+                ),
+              );
+            }
+          };
     client.setProtocolV311();
     client.connectionMessage = MqttConnectMessage()
         .withClientIdentifier('bicycle-obu-' + configuration.nodeId)
@@ -121,10 +122,9 @@ class MqttOtmPublisher implements OtmPublisher {
               'Unknown MQTT connection failure',
         );
       }
-      _setStatus(_status.copyWith(
-        state: OtmConnectionState.connected,
-        clearError: true,
-      ));
+      _setStatus(
+        _status.copyWith(state: OtmConnectionState.connected, clearError: true),
+      );
       _publishText(
         'its/' + configuration.nodeId + '/status',
         'online',
@@ -135,10 +135,12 @@ class MqttOtmPublisher implements OtmPublisher {
         'BicycleOBU Flutter app',
       );
     } catch (error) {
-      _setStatus(_status.copyWith(
-        state: OtmConnectionState.error,
-        lastError: error.toString(),
-      ));
+      _setStatus(
+        _status.copyWith(
+          state: OtmConnectionState.error,
+          lastError: error.toString(),
+        ),
+      );
       client.disconnect();
     }
   }
@@ -155,33 +157,38 @@ class MqttOtmPublisher implements OtmPublisher {
     final client = _client;
     if (client?.connectionStatus?.state != MqttConnectionState.connected ||
         record.rawBytes == null) {
-      _setStatus(_status.copyWith(
-        attempted: nextAttempt,
-        failed: _status.failed + 1,
-        lastError: 'Live frame dropped because the OTM uplink was offline.',
-      ));
+      _setStatus(
+        _status.copyWith(
+          attempted: nextAttempt,
+          failed: _status.failed + 1,
+          lastError: 'Live frame dropped because the OTM uplink was offline.',
+        ),
+      );
       return;
     }
     try {
-      final payload = MqttClientPayloadBuilder()
-        ..addBuffer(record.rawBytes!);
+      final payload = MqttClientPayloadBuilder()..addBuffer(record.rawBytes!);
       client!.publishMessage(
         'its/' + _configuration.nodeId + '/packet',
         MqttQos.atMostOnce,
         payload.payload!,
         retain: false,
       );
-      _setStatus(_status.copyWith(
-        attempted: nextAttempt,
-        successful: _status.successful + 1,
-        clearError: true,
-      ));
+      _setStatus(
+        _status.copyWith(
+          attempted: nextAttempt,
+          successful: _status.successful + 1,
+          clearError: true,
+        ),
+      );
     } catch (error) {
-      _setStatus(_status.copyWith(
-        attempted: nextAttempt,
-        failed: _status.failed + 1,
-        lastError: error.toString(),
-      ));
+      _setStatus(
+        _status.copyWith(
+          attempted: nextAttempt,
+          failed: _status.failed + 1,
+          lastError: error.toString(),
+        ),
+      );
     }
   }
 

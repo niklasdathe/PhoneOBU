@@ -44,10 +44,7 @@ class _ObuBootstrapState extends State<ObuBootstrap> {
 
   @override
   Widget build(BuildContext context) {
-    return ObuScope(
-      controller: controller,
-      child: const ObuApp(),
-    );
+    return ObuScope(controller: controller, child: const ObuApp());
   }
 }
 
