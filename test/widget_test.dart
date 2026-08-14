@@ -4,6 +4,8 @@ import 'package:bicycle_obu/app.dart';
 import 'package:bicycle_obu/data/obu_repository.dart';
 import 'package:bicycle_obu/data/navigation/navigation_service.dart';
 import 'package:bicycle_obu/data/phone_sensors/demo_phone_sensors_repository.dart';
+import 'package:bicycle_obu/data/settings_repository.dart';
+import 'package:bicycle_obu/models/app_settings.dart';
 import 'package:bicycle_obu/models/navigation_route.dart';
 import 'package:bicycle_obu/models/data_record.dart';
 import 'package:bicycle_obu/models/obu_snapshot.dart';
@@ -20,6 +22,7 @@ void main() {
         repository: repository,
         phoneSensors: DemoPhoneSensorsRepository(),
         navigationService: _FakeNavigationService(),
+        settingsRepository: _MemorySettingsRepository(),
       ),
     );
     await tester.pump();
@@ -29,6 +32,24 @@ void main() {
     expect(find.text('148 bpm'), findsOneWidget);
     expect(find.text('Road work'), findsOneWidget);
   });
+}
+
+class _MemorySettingsRepository implements SettingsRepository {
+  AppSettings settings = AppSettings.defaults();
+
+  @override
+  Future<AppSettings> load() async => settings;
+
+  @override
+  Future<void> save(AppSettings settings) async {
+    this.settings = settings;
+  }
+
+  @override
+  Future<String?> readSecureCredential(String key) async => null;
+
+  @override
+  Future<void> saveSecureCredential(String key, String? value) async {}
 }
 
 class _FakeNavigationService implements NavigationService {
