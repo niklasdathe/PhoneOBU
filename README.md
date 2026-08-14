@@ -50,8 +50,8 @@ OpenTrafficMap availability.
 
 ## Development workflow
 
-Flutter 3.35 or newer is required. Generate missing platform boilerplate once,
-then run the complete verification suite:
+Use a stable Flutter release that includes Dart 3.11.4 or newer. Generate
+missing platform boilerplate once, then run the complete verification suite:
 
 ```bash
 ./tool/bootstrap_platforms.sh
