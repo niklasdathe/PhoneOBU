@@ -18,7 +18,7 @@ dependencies:
   http: 1.6.0
   latlong2: 0.10.1
   mqtt_client: ^10.11.11
-  package_info_plus: ^8.3.1
+  package_info_plus: ^10.0.0
   path_provider: ^2.1.5
   sensors_plus: 7.1.0
   share_plus: ^11.1.0
