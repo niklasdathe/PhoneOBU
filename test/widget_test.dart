@@ -25,9 +25,8 @@ void main() {
         settingsRepository: _MemorySettingsRepository(),
       ),
     );
-    for (var frame = 0; frame < 10; frame++) {
-      await tester.pump(const Duration(milliseconds: 100));
-    }
+    await repository.started.future;
+    await tester.pump();
 
     expect(find.text('Jungfernstieg'), findsOneWidget);
     expect(find.text('22'), findsOneWidget);
@@ -76,6 +75,7 @@ class _FakeNavigationService implements NavigationService {
 }
 
 class _StaticRepository implements ObuRepository {
+  final started = Completer<void>();
   final _snapshots = StreamController<ObuSnapshot>.broadcast();
   final _diagnostics = StreamController<TransportDiagnostics>.broadcast();
   final _records = StreamController<ObuDataRecord>.broadcast();
@@ -144,6 +144,7 @@ class _StaticRepository implements ObuRepository {
       ),
     );
     _diagnostics.add(TransportDiagnostics.initial(transportName: 'Test'));
+    started.complete();
   }
 
   @override
